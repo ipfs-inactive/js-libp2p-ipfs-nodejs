@@ -1,0 +1,37 @@
+{
+  "name": "libp2p-ipfs",
+  "version": "0.0.0",
+  "description": "The libp2p build (module) used by js-ipfs on Node.js",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha tests/test-*.js",
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ipfs/js-libp2p-ipfs.git"
+  },
+  "keywords": [
+    "IPFS"
+  ],
+  "author": "David Dias <daviddias@ipfs.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ipfs/js-libp2p-ipfs/issues"
+  },
+  "homepage": "https://github.com/ipfs/js-libp2p-ipfs#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "pre-commit": "^1.1.2",
+    "standard": "^6.0.7"
+  },
+  "dependencies": {
+    "libp2p-spdy": "^0.1.0",
+    "libp2p-swarm": "^0.5.5",
+    "libp2p-tcp": "^0.1.2",
+    "multiaddr": "^1.1.1",
+    "peer-id": "^0.5.0",
+    "peer-info": "^0.4.0"
+  }
+}
