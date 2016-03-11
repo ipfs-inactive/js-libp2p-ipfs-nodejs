@@ -1,32 +1,33 @@
 const Swarm = require('libp2p-swarm')
-const tcp = require('libp2p-tcp')
+const Peer = require('peer-info')
+const TCP = require('libp2p-tcp')
 // const utp = require('libp2p-utp')
-var Spdy = require('libp2p-spdy')
+// const ws = require('libp2p-websockets')
+const spdy = require('libp2p-spdy')
+const multiaddr = require('multiaddr')
 
-exports = module.exports = libp2p
+exports = module.exports
 
-function libp2p (options) {
-  // options.peer - my Peer Info
-  // options.multiaddrs = { tcp: <multiaddr> , utp: <multiaddr>}
-  //
-  const swarm = new Swarm(options.peer)
-  swarm.addStreamMuxer('spdy', Spdy, {})
+exports.Node = function Node (peerInfo) {
+  if (!(this instanceof Node)) {
+    return new Node(peerInfo)
+  }
+  if (!peerInfo) {
+    peerInfo = new Peer()
+    peerInfo.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
+  }
 
-  return {
-    listen: (callback) => {
-      // add the transports
-      // spdy and stuff
-      swarm.addTransport('tcp',
-        tcp,
-        { multiaddr: options.multiaddrs.tcp },
-        {},
-        { port: options.multiaddrs.tcp.toString().split('/')[4] },
-        () => {
-          callback()
-        })
-    },
-    records: '',
-    routing: '',
-    swarm: swarm
+  // Swarm
+  this.swarm = new Swarm(peerInfo)
+  this.swarm.transport.add('tcp', new TCP())
+  this.swarm.transport.listen('tcp', {}, null, () => {})
+  this.swarm.connection.addStreamMuxer(spdy)
+  this.swarm.connection.reuse()
+
+  this.routing = null
+  this.records = null
+
+  this.dial = () => {
+    throw new Error('THIS WILL BE EQUIVALENT TO THE ROUTED HOST FEATURE, IT WILL FIGURE OUT EVERYTHING :D')
   }
 }
