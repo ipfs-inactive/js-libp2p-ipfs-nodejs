@@ -20,10 +20,12 @@ exports.Node = function Node (peerInfo) {
   // Swarm
   this.swarm = new Swarm(peerInfo)
   this.swarm.transport.add('tcp', new TCP())
-  this.swarm.transport.listen('tcp', {}, null, () => {})
   this.swarm.connection.addStreamMuxer(spdy)
   this.swarm.connection.reuse()
 
+  this.start = (callback) => {
+    this.swarm.transport.listen('tcp', {}, null, callback)
+  }
   this.routing = null
   this.records = null
 
