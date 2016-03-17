@@ -10,6 +10,9 @@ const peerB = new Peer()
 peerB.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
 const nodeB = new libp2p.Node(peerB)
 
+nodeA.start(() => {})
+nodeB.start(() => {})
+
 setTimeout(establishConn, 1000)
 
 function establishConn () {
