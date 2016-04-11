@@ -10,11 +10,25 @@ js-libp2p-ipfs
 
 > libp2p build (module) used in js-ipfs
 
-## Usage
+# Installation
 
-## API
+## npm
 
-## Examples
+```sh
+> npm i libp2p-ipfs
+```
+
+## Use in Node.js
+
+```js
+const lip2p = require('libp2p-ipfs')
+```
+
+# Usage
+
+# API
+
+# Examples
 
 - Start two libp2p Nodes (create and make them listen)
 - Set up a handler for a protocol (through multistream)

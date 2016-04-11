@@ -5,14 +5,12 @@
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
-    "test": "dignified-test",
-    "test:node": "dignified-test node",
-    "test:browser": "dignified-test browser",
-    "build": "dignified-build",
+    "test": "dignified-test node",
+    "build": "dignified-build node",
     "lint": "dignified-lint",
-    "release": "dignified-release",
-    "release-minor": "dignified-release --minor",
-    "release-major": "dignified-release --major"
+    "release": "dignified-release node",
+    "release-minor": "dignified-release node --minor",
+    "release-major": "dignified-release node --major"
   },
   "repository": {
     "type": "git",
@@ -29,7 +27,7 @@
   "homepage": "https://github.com/ipfs/js-libp2p-ipfs#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "dignified.js": "github:dignifiedquire/dignified.js",
+    "dignified.js": "^1.0.1",
     "pre-commit": "^1.1.2"
   },
   "dependencies": {
