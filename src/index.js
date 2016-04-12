@@ -1,3 +1,5 @@
+'use strict'
+
 const Swarm = require('libp2p-swarm')
 const Peer = require('peer-info')
 const TCP = require('libp2p-tcp')

@@ -1,3 +1,6 @@
+'use strict'
+/* eslint-disable no-console */
+
 const Peer = require('peer-info')
 const libp2p = require('../src')
 const multiaddr = require('multiaddr')
