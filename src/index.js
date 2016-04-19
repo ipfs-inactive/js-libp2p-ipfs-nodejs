@@ -21,15 +21,13 @@ exports.Node = function Node (peerInfo) {
 
   // Swarm
   this.swarm = new Swarm(peerInfo)
-  this.swarm.transport.add('tcp', new TCP())
   this.swarm.transport.add('ws', new WS())
+  this.swarm.transport.add('tcp', new TCP())
   this.swarm.connection.addStreamMuxer(spdy)
   this.swarm.connection.reuse()
 
-  this.start = (callback) => {
-    this.swarm.transport.listen('tcp', {}, null, callback)
-    // when we get websockets addr in our config
-    // this.swarm.transport.listen('tcp', {}, null, callback)
+  this.start = (done) => {
+    this.swarm.listen(done)
   }
 
   this.routing = null

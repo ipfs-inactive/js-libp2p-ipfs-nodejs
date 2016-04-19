@@ -41,9 +41,11 @@
     "libp2p-swarm": "^0.12.9",
     "libp2p-tcp": "^0.5.2",
     "libp2p-websockets": "^0.4.4",
+    "mafmt": "^1.0.1",
     "multiaddr": "^1.4.1",
     "peer-id": "^0.6.6",
-    "peer-info": "^0.6.2"
+    "peer-info": "^0.6.2",
+    "run-parallel": "^1.1.6"
   },
   "aegir": {
     "webpack": {

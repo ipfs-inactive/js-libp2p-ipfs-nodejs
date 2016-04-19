@@ -43,4 +43,41 @@ describe('libp2p-ipfs', () => {
       done()
     })
   })
+  describe('ws - ws', () => {
+    const idA = Id.create()
+    const idB = Id.create()
+    const peerA = new Peer(idA)
+    const peerB = new Peer(idB)
+
+    let nodeA
+    let nodeB
+
+    it('prepare node A', (done) => {
+      peerA.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/8030/websockets'))
+
+      nodeA = libp2p(peerA)
+      nodeA.start(done)
+    })
+
+    it('prepare node B', (done) => {
+      peerB.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/8040/websockets'))
+
+      nodeB = libp2p(peerB)
+      nodeB.start(done)
+    })
+
+    it('B handle /echo/1.0.0', (done) => {
+      nodeB.swarm.handle('/echo/1.0.0', (conn) => {
+        conn.pipe(conn)
+      })
+      done()
+    })
+
+    it('A dial B to speak /echo/1.0.0', (done) => {
+      nodeA.swarm.dial(peerB, '/echo/1.0.0', (err, conn) => {
+        expect(err).to.not.exist
+        done()
+      })
+    })
+  })
 })
