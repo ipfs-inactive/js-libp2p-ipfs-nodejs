@@ -38,9 +38,9 @@
   },
   "dependencies": {
     "libp2p-spdy": "^0.3.1",
-    "libp2p-swarm": "^0.12.0",
-    "libp2p-tcp": "^0.4.0",
-    "libp2p-websockets": "^0.3.2",
+    "libp2p-swarm": "^0.12.1",
+    "libp2p-tcp": "^0.5.0",
+    "libp2p-websockets": "^0.4.1",
     "multiaddr": "^1.4.1",
     "peer-id": "^0.6.6",
     "peer-info": "^0.6.2"
