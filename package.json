@@ -1,6 +1,6 @@
 {
   "name": "libp2p-ipfs",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "The libp2p build (module) used by js-ipfs on Node.js",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
@@ -38,9 +38,9 @@
   },
   "dependencies": {
     "libp2p-spdy": "^0.3.1",
-    "libp2p-swarm": "^0.12.4",
-    "libp2p-tcp": "^0.5.0",
-    "libp2p-websockets": "^0.4.1",
+    "libp2p-swarm": "^0.12.9",
+    "libp2p-tcp": "^0.5.2",
+    "libp2p-websockets": "^0.4.4",
     "multiaddr": "^1.4.1",
     "peer-id": "^0.6.6",
     "peer-info": "^0.6.2"
