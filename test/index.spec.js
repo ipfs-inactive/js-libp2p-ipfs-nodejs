@@ -8,18 +8,14 @@ const Peer = require('peer-info')
 const multiaddr = require('multiaddr')
 
 describe('libp2p-ipfs', () => {
-  const idA = Id.create()
   const idB = Id.create()
-  const peerA = new Peer(idA)
   const peerB = new Peer(idB)
 
   var nodeA
   var nodeB
 
   it('prepare node A', (done) => {
-    peerA.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/8010'))
-
-    nodeA = libp2p(peerA)
+    nodeA = libp2p()
     nodeA.start(done)
   })
 
@@ -43,6 +39,12 @@ describe('libp2p-ipfs', () => {
       done()
     })
   })
+
+  it('dial to be implemented', (done) => {
+    expect(nodeA.dial).to.throw(Error)
+    done()
+  })
+
   describe('ws - ws', () => {
     const idA = Id.create()
     const idB = Id.create()
