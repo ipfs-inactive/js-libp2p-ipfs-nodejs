@@ -55,14 +55,14 @@ describe('libp2p-ipfs', () => {
     let nodeB
 
     it('prepare node A', (done) => {
-      peerA.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/8030/websockets'))
+      peerA.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/8030/ws'))
 
       nodeA = libp2p(peerA)
       nodeA.start(done)
     })
 
     it('prepare node B', (done) => {
-      peerB.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/8040/websockets'))
+      peerB.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/8040/ws'))
 
       nodeB = libp2p(peerB)
       nodeB.start(done)
