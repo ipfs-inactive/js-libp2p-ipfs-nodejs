@@ -37,8 +37,8 @@
     "pre-commit": "^1.1.2"
   },
   "dependencies": {
-    "libp2p-spdy": "^0.4.0",
-    "libp2p-swarm": "^0.15.0",
+    "libp2p-spdy": "^0.5.0",
+    "libp2p-swarm": "^0.16.0",
     "libp2p-tcp": "^0.5.2",
     "libp2p-websockets": "^0.5.0",
     "mafmt": "^2.0.0",
