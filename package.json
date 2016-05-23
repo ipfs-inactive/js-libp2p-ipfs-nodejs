@@ -38,12 +38,12 @@
   },
   "dependencies": {
     "libp2p-spdy": "^0.6.1",
-    "libp2p-swarm": "^0.18.0",
+    "libp2p-swarm": "^0.18.1",
     "libp2p-tcp": "^0.6.0",
     "libp2p-websockets": "^0.6.0",
     "mafmt": "^2.1.0",
     "multiaddr": "^2.0.2",
-    "peer-id": "^0.6.6",
+    "peer-id": "^0.6.7",
     "peer-info": "^0.6.2",
     "run-parallel": "^1.1.6"
   },
