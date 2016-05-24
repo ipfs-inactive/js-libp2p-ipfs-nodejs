@@ -7,6 +7,7 @@ const TCP = require('libp2p-tcp')
 const WS = require('libp2p-websockets')
 const spdy = require('libp2p-spdy')
 const multiaddr = require('multiaddr')
+const EE = require('events').EventEmitter
 
 exports = module.exports
 
@@ -30,6 +31,7 @@ exports.Node = function Node (peerInfo) {
     this.swarm.listen(done)
   }
 
+  this.discovery = new EE()
   this.routing = null
   this.records = null
 
