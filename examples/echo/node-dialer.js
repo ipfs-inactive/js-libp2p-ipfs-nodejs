@@ -29,7 +29,7 @@ nodeA.start((err) => {
   console.log('->', peerA.multiaddrs[0].toString())
   console.log('->', peerA.id.toB58String())
 
-  nodeA.swarm.dial(peerB, '/echo/1.0.0', (err, conn) => {
+  nodeA.dialByPeerInfo(peerB, '/echo/1.0.0', (err, conn) => {
     if (err) {
       throw err
     }
@@ -37,13 +37,10 @@ nodeA.start((err) => {
 
     conn.on('data', (data) => {
       console.log('echo back', data.toString())
-      conn.write(data)
     })
 
     conn.write('hey')
-
     conn.end()
-
     conn.on('end', process.exit)
   })
 })

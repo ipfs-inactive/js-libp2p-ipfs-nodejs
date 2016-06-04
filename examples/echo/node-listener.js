@@ -18,7 +18,7 @@ nodeB.start((err) => {
     throw err
   }
 
-  nodeB.swarm.handle('/echo/1.0.0', (conn) => {
+  nodeB.handle('/echo/1.0.0', (conn) => {
     conn.pipe(conn)
   })
 
