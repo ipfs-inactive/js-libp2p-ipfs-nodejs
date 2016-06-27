@@ -83,11 +83,11 @@ describe('libp2p-ipfs', () => {
       nodeF.start
     ], (err) => {
       expect(err).to.not.exist
-      expect(nodeA.peerInfo.multiaddrs.length).to.equal(1)
-      expect(nodeB.peerInfo.multiaddrs.length).to.equal(1)
-      expect(nodeC.peerInfo.multiaddrs.length).to.equal(1)
-      expect(nodeD.peerInfo.multiaddrs.length).to.equal(1)
-      expect(nodeE.peerInfo.multiaddrs.length).to.equal(2)
+      expect(nodeA.peerInfo.multiaddrs.length > 1).to.equal(true)
+      expect(nodeB.peerInfo.multiaddrs.length > 1).to.equal(true)
+      expect(nodeC.peerInfo.multiaddrs.length > 1).to.equal(true)
+      expect(nodeD.peerInfo.multiaddrs.length > 1).to.equal(true)
+      expect(nodeE.peerInfo.multiaddrs.length > 2).to.equal(true)
       expect(nodeF.peerInfo.multiaddrs.length).to.equal(1)
       done()
     })
