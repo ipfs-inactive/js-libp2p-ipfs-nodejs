@@ -415,6 +415,15 @@ describe('libp2p-ipfs', () => {
     }
   })
 
+  it('nodeE ping to nodeF', (done) => {
+    const p = nodeE.ping(nodeF.peerInfo)
+
+    p.once('ping', (time) => {
+      p.stop()
+      done()
+    })
+  })
+
   it('stop', (done) => {
     parallel([
       nodeA.stop,

@@ -9,6 +9,7 @@ const secio = require('libp2p-secio')
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const PeerBook = require('peer-book')
+const Ping = require('libp2p-ping')
 const multiaddr = require('multiaddr')
 const mafmt = require('mafmt')
 const EE = require('events').EventEmitter
@@ -195,6 +196,12 @@ exports.Node = function Node (pInfo, pBook) {
 
   this.unhandle = (protocol) => {
     return this.swarm.unhandle(protocol)
+  }
+
+  Ping.attach(this.swarm) // Enable this peer to echo Ping requests
+
+  this.ping = (peerDst) => {
+    return new Ping(this.swarm, peerDst) // Ping peerDst, peerDst must be a peer-info object
   }
 
   this.discovery = new EE()
