@@ -229,6 +229,64 @@ describe('libp2p-ipfs', () => {
     })
   })
 
+  it('libp2p.dialByMultiaddr nodeA to nodeB without /ipfs/Qm on multiaddr', (done) => {
+    // TODO
+    // dial to nodeB (without the Id)
+    // hangup nodeB
+
+    const nodeBMultiaddrTCPStripped = nodeBMultiaddrTCP.decapsulate('ipfs')
+
+    nodeA.dialByMultiaddr(nodeBMultiaddrTCPStripped, (err) => {
+      expect(err).to.not.exist
+      // Some time for Identify to finish
+      setTimeout(check, 500)
+
+      function check () {
+        parallel([
+          (cb) => {
+            const peers = nodeA.peerBook.getAll()
+            expect(err).to.not.exist
+            expect(Object.keys(peers)).to.have.length(1)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeB.peerBook.getAll()
+            expect(err).to.not.exist
+            expect(Object.keys(peers)).to.have.length(1)
+            cb()
+          }
+        ], hangUp)
+      }
+    })
+
+    function hangUp () {
+      nodeA.hangUpByMultiaddr(nodeBMultiaddrTCP, (err) => {
+        expect(err).to.not.exist
+        setTimeout(check, 500)
+
+        function check () {
+          parallel([
+            (cb) => {
+              const peers = nodeA.peerBook.getAll()
+              expect(err).to.not.exist
+              expect(Object.keys(peers)).to.have.length(0)
+              expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(0)
+
+              cb()
+            },
+            (cb) => {
+              const peers = nodeB.peerBook.getAll()
+              expect(err).to.not.exist
+              expect(Object.keys(peers)).to.have.length(0)
+              expect(Object.keys(nodeB.swarm.muxedConns)).to.have.length(0)
+              cb()
+            }
+          ], done)
+        }
+      })
+    }
+  })
+
   it('libp2p.dialByPeerInfo nodeA to nodeB', (done) => {
     nodeA.dialByPeerInfo(nodeB.peerInfo, (err) => {
       expect(err).to.not.exist
