@@ -5,6 +5,7 @@ const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const libp2p = require('../../src')
 const multiaddr = require('multiaddr')
+const pull = require('pull-stream')
 
 const privateKeyA = 'CAASpAkwggSgAgEAAoIBAQCwJRMRUmQFEr1Y+JUm2A2IEZbGUbHi/D3+SQ5UQLVA561DOHpCNR8gd/3VlniuOrKVpBlZETSmx5tWhXkyvEzfzzP0+0oOK/60nRdDRhCs7xwBi0gZk3uHiEao1T8+x2YUz7XQYNCgXHN1ouSTtFRrI2ub5Zj4QPpc6tSmTczyziYgCYskT5VRxEfWts8R4LzJDhGSZUhZMEEEXSsI1nBXyNS4W81WmnCizidgIpxWM5GnUA5H+TNQ5qkEO78E4vOKjj44Nk6OUpfGwwdt2iTWIakrdme+mdcLAeXiwud3cv3P8d7YJYOjW8M/CTizmvU03IiA3m12AR0mbbY/7qHrAgMBAAECggEAJ6xiDA+7mWzsGuL6bSJSgeg8RnTWFSLtL53yzUU5zeGgo7hPySO/3AdKs9XNXqi32n54exgl/L6OnUE42BWTVwGLWU1UE7cTCkkrmSppzRmZ/DsLxT7znsYx7AsD0LcGpf9WmxWDR+sq0j8bLq16KhtzPEzNVHUGLvFxbfeuBq3KLhvma7cp0I22dbgVZ3DTA5SJWiGrZNjXrzH69MFu8TMiaGhRSqqP4LWWoZq/xwMjNtQrMAL5CVg4Vr9UYd8unKvLMpvMaA7wescpKj0Hgh32kyCiIRiTEKhuZgYxy+jK/681l55VTYvCyzOE7kXBqMgThI7agUwItedv9UAiMQKBgQDcKe4iTtjyDr304gEnvPXO2QzMzmzCo5strRHOGziF7qKo0N7ZxdHgnD9tRuvsA69On70Mpph3N6ds6vjvedPP9EO72bKTqHP2c0m5UIkXBFef39aRWLLvQmRLW86TifNc6s9rEDvPAwBJtYTmz1hgcSP09yfg4EHF74kCfOAu2QKBgQDM0OeqiSlUr4NrOoXn/qHfcvhAXbvCuvjOULFJAXNTlcV01um270m5TBhJI+Pr3W9/kxePAeONWo5pOcjr/+Od9jm5N9b56FOMHtgV6pFQbnC5p6AX2vAK2N/wimDG1zPbyJoLdzwNLo0shH/TZTphCdNz6SC4zpai887eqBYkYwKBgALaJDSbkuHn4PwYJW2vW/vXAfxxPCV1WyBHWrCx15Scl8zaD9kAYAyp2YR/47SGA7JgDWHpkpYQyYF2tczcZisOfgYj9tVE3GO38J+O9IewzbXLf4sYfBDvaj8zrERrCBUPEarQZgXzgwBxcoxO6VUuggm9Xe3i2ddHmB3JIlpZAn9tm15e5Qg5SbQKrkb64EnASsaPq5nPnD+KKaS2bRBKqtwAqwJn46aQgyh7+7j9gIMqwozY+ynLe6q6pTHhGg+1eQ9rD3b8RlhvpBH/qIgbgv7QW+RQ39mV9HnjQCqKPqCB/dhySlzYsRDbwgymFIYpaBjA7wGT5Pq4OcF7ZnhzAoGAIzHjYXZQcxFN7gOUm/bnXb+OuLnvdBaKzF1CFxeTy4gJmf7Jn9GEcJQQCehVpaJGAd2+hRM1fkZwPqtScnGEVSpNkU3IeTG7nCFVcP14o4eMLC9tMJNC7Ul8hjPqlhVEgS5cCDOOhdqkYY1jdvVGnRSjEDua4eSxA7OJjyMEcFc='
 
@@ -31,16 +32,19 @@ nodeA.start((err) => {
 
   nodeA.dialByPeerInfo(peerB, '/echo/1.0.0', (err, conn) => {
     if (err) {
-      throw err
+      return console.log('err', err)
     }
     console.log('nodeA dialed to nodeB on protocol: /echo/1.0.0')
 
-    conn.on('data', (data) => {
-      console.log('echo back', data.toString())
-    })
-
-    conn.write('hey')
-    conn.end()
-    conn.on('end', process.exit)
+    pull(
+      pull.values(['hey']),
+      conn,
+      pull.collect((err, data) => {
+        if (err) {
+          throw err
+        }
+        console.log('echo back', data.toString())
+      })
+    )
   })
 })
