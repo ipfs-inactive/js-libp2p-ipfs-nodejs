@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "libp2p-spdy": "^0.8.1",
-    "libp2p-swarm": "^0.22.2",
+    "libp2p-swarm": "^0.23.0",
     "libp2p-tcp": "^0.7.4",
     "libp2p-websockets": "^0.7.1",
     "mafmt": "^2.1.1",
