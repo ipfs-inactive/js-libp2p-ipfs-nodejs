@@ -1,13 +1,14 @@
 'use strict'
 
 const Swarm = require('libp2p-swarm')
-const PeerId = require('peer-id')
-const PeerInfo = require('peer-info')
-const PeerBook = require('peer-book')
 const TCP = require('libp2p-tcp')
 // const UTP = require('libp2p-utp')
 const WS = require('libp2p-websockets')
 const spdy = require('libp2p-spdy')
+const secio = require('libp2p-secio')
+const PeerId = require('peer-id')
+const PeerInfo = require('peer-info')
+const PeerBook = require('peer-book')
 const multiaddr = require('multiaddr')
 const mafmt = require('mafmt')
 const EE = require('events').EventEmitter
@@ -39,6 +40,8 @@ exports.Node = function Node (pInfo, pBook) {
   this.swarm.connection.addStreamMuxer(spdy)
   this.swarm.connection.reuse()
 
+  this.swarm.connection.crypto(secio.tag, secio.encrypt)
+
   this.swarm.on('peer-mux-established', (peerInfo) => {
     this.peerBook.put(peerInfo)
   })
@@ -65,6 +68,7 @@ exports.Node = function Node (pInfo, pBook) {
       if (err) {
         return callback(err)
       }
+
       isOnline = true
       callback()
     })

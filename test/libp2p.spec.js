@@ -6,9 +6,9 @@ const libp2p = require('../src')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
 const parallel = require('run-parallel')
-const bl = require('bl')
 const spawn = require('child_process').spawn
 const path = require('path')
+const pull = require('pull-stream')
 
 describe('libp2p-ipfs', () => {
   let nodeA // TCP
@@ -135,7 +135,7 @@ describe('libp2p-ipfs', () => {
 
   it('handle echo proto in 6 nodes', () => {
     function echo (conn) {
-      conn.pipe(conn)
+      pull(conn, conn)
     }
 
     nodeA.handle('/echo/1.0.0', echo)
@@ -191,13 +191,15 @@ describe('libp2p-ipfs', () => {
           cb()
         }
       ], () => {
-        conn.pipe(bl((err, data) => {
-          expect(err).to.not.exist
-          expect(data.toString()).to.equal('hey')
-          done()
-        }))
-        conn.write('hey')
-        conn.end()
+        pull(
+          pull.values([Buffer('hey')]),
+          conn,
+          pull.collect((err, data) => {
+            expect(err).to.not.exist
+            expect(data).to.be.eql([Buffer('hey')])
+            done()
+          })
+        )
       })
     })
   })
@@ -272,13 +274,15 @@ describe('libp2p-ipfs', () => {
           cb()
         }
       ], () => {
-        conn.pipe(bl((err, data) => {
-          expect(err).to.not.exist
-          expect(data.toString()).to.equal('hey')
-          done()
-        }))
-        conn.write('hey')
-        conn.end()
+        pull(
+          pull.values([Buffer('hey')]),
+          conn,
+          pull.collect((err, data) => {
+            expect(err).to.not.exist
+            expect(data).to.be.eql([Buffer('hey')])
+            done()
+          })
+        )
       })
     })
   })
@@ -387,13 +391,15 @@ describe('libp2p-ipfs', () => {
       const peers = nodeA.peerBook.getAll()
       expect(Object.keys(peers)).to.have.length(4)
 
-      conn.pipe(bl((err, data) => {
-        expect(err).to.not.exist
-        expect(data.toString()).to.equal('hey')
-        done()
-      }))
-      conn.write('hey')
-      conn.end()
+      pull(
+        pull.values([Buffer('hey')]),
+        conn,
+        pull.collect((err, data) => {
+          expect(err).to.not.exist
+          expect(data).to.be.eql([Buffer('hey')])
+          done()
+        })
+      )
     })
   })
 

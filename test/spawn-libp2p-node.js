@@ -6,6 +6,7 @@ const libp2p = require('../src')
 const PeerInfo = require('peer-info')
 const PeerId = require('peer-id')
 const multiaddr = require('multiaddr')
+const pull = require('pull-stream')
 
 const idBak = require('./test-data/test-id.json')
 
@@ -17,7 +18,7 @@ pInfo.multiaddr.add(maddr)
 const node = new libp2p.Node(pInfo)
 
 node.handle('/echo/1.0.0', (conn) => {
-  conn.pipe(conn)
+  pull(conn, conn)
 })
 
 node.start((err) => {
