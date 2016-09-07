@@ -32,17 +32,17 @@
   },
   "homepage": "https://github.com/ipfs/js-libp2p-ipfs#readme",
   "devDependencies": {
-    "aegir": "^4.0.0",
+    "aegir": "^8.0.0",
     "bl": "^1.1.2",
     "chai": "^3.5.0",
     "pre-commit": "^1.1.3",
     "run-parallel": "^1.1.6"
   },
   "dependencies": {
-    "libp2p-spdy": "^0.8.1",
+    "libp2p-spdy": "^0.9.0",
     "libp2p-swarm": "^0.22.2",
-    "libp2p-tcp": "^0.7.4",
-    "libp2p-websockets": "^0.7.1",
+    "libp2p-tcp": "^0.8.1",
+    "libp2p-websockets": "^0.8.1",
     "mafmt": "^2.1.1",
     "multiaddr": "^2.0.2",
     "peer-book": "^0.3.0",
