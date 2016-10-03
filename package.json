@@ -51,15 +51,6 @@
     "peer-info": "^0.7.0",
     "run-parallel": "^1.1.6"
   },
-  "aegir": {
-    "webpack": {
-      "resolve": {
-        "alias": {
-          "node-forge": "../vendor/forge.bundle.js"
-        }
-      }
-    }
-  },
   "contributors": [
     "David Dias <daviddias.p@gmail.com>",
     "JGAntunes <j.goncalo.antunes@gmail.com>",
