@@ -24,8 +24,7 @@ exports.Node = function Node (pInfo, pBook) {
   }
 
   if (!pInfo) {
-    pInfo = new PeerInfo()
-    pInfo.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
+    throw new Error('missing peer info')
   }
 
   if (!pBook) {
