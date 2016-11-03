@@ -133,7 +133,7 @@ describe('libp2p-ipfs', () => {
   })
 
   it('handle echo proto in 6 nodes', () => {
-    function echo (conn) {
+    function echo (protocol, conn) {
       pull(conn, conn)
     }
 

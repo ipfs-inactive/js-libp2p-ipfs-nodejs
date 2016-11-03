@@ -21,14 +21,14 @@ nodeListener.start((err) => {
     console.log(peerInfo.id.toB58String())
   })
 
-  nodeListener.handle('/echo/1.0.0', (conn) => {
+  nodeListener.handle('/echo/1.0.0', (protocol, conn) => {
     pull(
       conn,
       conn
     )
   })
 
-  nodeListener.handle('/hello/1.0.0', (conn) => {
+  nodeListener.handle('/hello/1.0.0', (protocol, conn) => {
     pull(
       pull.values(['hello', 'world']),
       conn

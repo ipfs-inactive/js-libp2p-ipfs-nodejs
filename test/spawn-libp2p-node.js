@@ -21,7 +21,7 @@ PeerId.createFromJSON(idBak, (err, id) => {
 
   const node = new libp2p.Node(pInfo)
 
-  node.handle('/echo/1.0.0', (conn) => {
+  node.handle('/echo/1.0.0', (protocol, conn) => {
     pull(conn, conn)
   })
 

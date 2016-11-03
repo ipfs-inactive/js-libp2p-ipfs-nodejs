@@ -188,8 +188,8 @@ exports.Node = function Node (pInfo, pBook) {
     this.swarm.hangUp(peer, callback)
   }
 
-  this.handle = (protocol, handler) => {
-    return this.swarm.handle(protocol, handler)
+  this.handle = (protocol, handlerFunc, matchFunc) => {
+    return this.swarm.handle(protocol, handlerFunc, matchFunc)
   }
 
   this.unhandle = (protocol) => {
