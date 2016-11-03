@@ -5,7 +5,8 @@ const expect = require('chai').expect
 const libp2p = require('../src')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
-const parallel = require('run-parallel')
+const parallel = require('async/parallel')
+const map = require('async/map')
 const spawn = require('child_process').spawn
 const path = require('path')
 const pull = require('pull-stream')
@@ -29,48 +30,46 @@ describe('libp2p-ipfs', () => {
   let spawnedNode
 
   it('create 6 nodes', (done) => {
-    parallel([
-      (cb) => {
-        nodeA = new libp2p.Node()
-        cb()
-      },
-      (cb) => {
-        nodeB = new libp2p.Node()
-        cb()
-      },
-      (cb) => {
-        nodeC = new libp2p.Node()
-        cb()
-      },
-      (cb) => {
-        nodeD = new libp2p.Node()
-        cb()
-      },
-      (cb) => {
-        nodeE = new libp2p.Node()
-        const maddrWS = multiaddr('/ip4/127.0.0.1/tcp/25001/ws')
-        nodeE.peerInfo.multiaddr.add(maddrWS)
-
-        nodeEMultiaddrWebSockets = multiaddr(
-          nodeE.peerInfo.multiaddrs[1].toString() +
-          '/ipfs/' + nodeE.peerInfo.id.toB58String()
-        )
-        cb()
-      },
-      (cb) => {
-        const pInfo = new PeerInfo()
-        const maddrWS = multiaddr('/ip4/127.0.0.1/tcp/25002/ws')
-
-        pInfo.multiaddr.add(maddrWS)
-        nodeF = new libp2p.Node(pInfo)
-
-        nodeFMultiaddrWebSockets = multiaddr(
-          nodeF.peerInfo.multiaddrs[0].toString() +
-          '/ipfs/' + nodeF.peerInfo.id.toB58String()
-        )
-        cb()
+    map([0, 1, 2, 3, 4, 5], (i, cb) => {
+      PeerInfo.create(cb)
+    }, (err, infos) => {
+      if (err) {
+        return done(err)
       }
-    ], done)
+
+      infos.forEach((info, i) => {
+        if (i === 5) {
+          return
+        }
+        info.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
+      })
+
+      nodeA = new libp2p.Node(infos[0])
+      nodeB = new libp2p.Node(infos[1])
+      nodeC = new libp2p.Node(infos[2])
+      nodeD = new libp2p.Node(infos[3])
+      nodeE = new libp2p.Node(infos[4])
+      const maddrWS1 = multiaddr('/ip4/127.0.0.1/tcp/25001/ws')
+      nodeE.peerInfo.multiaddr.add(maddrWS1)
+
+      nodeEMultiaddrWebSockets = multiaddr(
+        nodeE.peerInfo.multiaddrs[1].toString() +
+        '/ipfs/' + nodeE.peerInfo.id.toB58String()
+      )
+
+      const pInfo = infos[5]
+      const maddrWS2 = multiaddr('/ip4/127.0.0.1/tcp/25002/ws')
+      pInfo.multiaddr.add(maddrWS2)
+
+      nodeF = new libp2p.Node(pInfo)
+
+      nodeFMultiaddrWebSockets = multiaddr(
+        nodeF.peerInfo.multiaddrs[0].toString() +
+        '/ipfs/' + nodeF.peerInfo.id.toB58String()
+      )
+
+      done()
+    })
   })
 
   it('start 6 nodes', (done) => {
@@ -134,7 +133,7 @@ describe('libp2p-ipfs', () => {
   })
 
   it('handle echo proto in 6 nodes', () => {
-    function echo (conn) {
+    function echo (protocol, conn) {
       pull(conn, conn)
     }
 

@@ -24,8 +24,7 @@ exports.Node = function Node (pInfo, pBook) {
   }
 
   if (!pInfo) {
-    pInfo = new PeerInfo()
-    pInfo.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
+    throw new Error('missing peer info')
   }
 
   if (!pBook) {
@@ -189,8 +188,8 @@ exports.Node = function Node (pInfo, pBook) {
     this.swarm.hangUp(peer, callback)
   }
 
-  this.handle = (protocol, handler) => {
-    return this.swarm.handle(protocol, handler)
+  this.handle = (protocol, handlerFunc, matchFunc) => {
+    return this.swarm.handle(protocol, handlerFunc, matchFunc)
   }
 
   this.unhandle = (protocol) => {

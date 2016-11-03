@@ -9,21 +9,26 @@ const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
 
 const idBak = require('./test-data/test-id.json')
-
-const pInfo = new PeerInfo(PeerId.createFromJSON(idBak))
-const maddr = multiaddr('/ip4/127.0.0.1/tcp/12345')
-
-pInfo.multiaddr.add(maddr)
-
-const node = new libp2p.Node(pInfo)
-
-node.handle('/echo/1.0.0', (conn) => {
-  pull(conn, conn)
-})
-
-node.start((err) => {
+PeerId.createFromJSON(idBak, (err, id) => {
   if (err) {
     throw err
   }
-  console.log('Spawned node started')
+
+  const pInfo = new PeerInfo(id)
+  const maddr = multiaddr('/ip4/127.0.0.1/tcp/12345')
+
+  pInfo.multiaddr.add(maddr)
+
+  const node = new libp2p.Node(pInfo)
+
+  node.handle('/echo/1.0.0', (protocol, conn) => {
+    pull(conn, conn)
+  })
+
+  node.start((err) => {
+    if (err) {
+      throw err
+    }
+    console.log('Spawned node started')
+  })
 })
