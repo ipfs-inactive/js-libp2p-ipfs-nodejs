@@ -43,7 +43,7 @@
     "libp2p-spdy": "^0.9.0",
     "libp2p-swarm": "^0.23.0",
     "libp2p-tcp": "^0.8.1",
-    "libp2p-websockets": "^0.8.1",
+    "libp2p-websockets": "^0.9.0",
     "mafmt": "^2.1.2",
     "multiaddr": "^2.0.2",
     "peer-book": "^0.3.0",
