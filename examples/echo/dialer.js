@@ -6,10 +6,14 @@ const PeerInfo = require('peer-info')
 const libp2p = require('../../src')
 const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
-
+var peerDialer;
 // Creation of PeerInfo of Dialer Node (this node)
-const idDialer = PeerId.createFromJSON(require('./peer-id-dialer'))
-const peerDialer = new PeerInfo(idDialer)
+PeerId.createFromJSON(require('./peer-id-dialer'), (err,idDialer)=>{
+  if(err)console.log(err);
+  peerDialer = new PeerInfo(idDialer)
+})
+
+//TODO: Use async.parallel to ensure peer for listener and dialer are made before attempt to dial
 peerDialer.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
 const nodeDialer = new libp2p.Node(peerDialer)
 
