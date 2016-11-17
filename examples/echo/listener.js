@@ -8,14 +8,16 @@ const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
 var peerListener
 
-PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener)=>{
+const idListener = PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener)=>{
   if (err) {
-    throw err
-
+    console.log(err);
   }else {
-    peerListener = new PeerInfo(idListener)
+    peerListener = new PeerInfo(idListener);
+
+    const peerListener = new PeerInfo(idListener)
     peerListener.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/10333'))
     const nodeListener = new libp2p.Node(peerListener)
+
     nodeListener.start((err) => {
       if (err) {
         throw err
