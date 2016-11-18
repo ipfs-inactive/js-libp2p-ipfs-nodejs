@@ -7,10 +7,10 @@ const libp2p = require('../../src')
 const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
 const async = require('async')
-var idListener
+let idListener
 
 async.parallel([
-  function (callback) {
+  (callback) => {
     PeerId.createFromJSON(require('./peer-id-dialer'), (err, idDialer) => {
       if (err) {
         throw err
@@ -18,7 +18,7 @@ async.parallel([
       callback(null, idDialer)
     })
   },
-  function (callback) {
+  (callback) => {
     PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
       if (err) {
         throw err
