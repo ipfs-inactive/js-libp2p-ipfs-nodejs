@@ -40,7 +40,7 @@
     "pull-stream": "^3.5.0"
   },
   "dependencies": {
-    "libp2p-secio": "^0.6.2",
+    "libp2p-secio": "^0.6.3",
     "libp2p-spdy": "^0.10.0",
     "libp2p-swarm": "^0.26.0",
     "libp2p-tcp": "^0.9.1",
