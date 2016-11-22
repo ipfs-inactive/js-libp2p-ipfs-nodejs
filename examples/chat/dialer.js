@@ -56,16 +56,16 @@ async.parallel([
       // With push streams
       // process.stdin.pipe(conn).pipe(process.stdout) enabled terminal-to-terminal chat
 
-      pull(
-        toPull(process.stdin),
-        conn,
-        pull.collect((err, data) => {
-          if (err) {
-            throw err
-          }
-          console.log(data.toString())
-        })
-      )
+      // pull(
+      //   toPull(process.stdin),
+      //   conn,
+      //   pull.collect((err, data) => {
+      //     if (err) {
+      //       throw err
+      //     }
+      //     console.log(data.toString())
+      //   })
+      // )
 
       //Produces 'already piped' error, after typing for the second time
       process.stdin.setEncoding('utf8');
