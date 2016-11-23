@@ -6,8 +6,10 @@ const PeerInfo = require('peer-info')
 const libp2p = require('../../src')
 const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
-const toPull = require('stream-to-pull-stream')
+// const toPull = require('stream-to-pull-stream')
 const async = require('async')
+const Pushable = require('pull-pushable')
+const p = Pushable()
 let idListener
 
 async.parallel([
@@ -52,30 +54,24 @@ async.parallel([
         throw err
       }
       console.log('nodeA dialed to nodeB on protocol: /chat/1.0.0')
-
-      // With push streams
-      // process.stdin.pipe(conn).pipe(process.stdout) enabled terminal-to-terminal chat
-
-      // pull(
-      //   toPull(process.stdin),
-      //   conn,
-      //   pull.collect((err, data) => {
-      //     if (err) {
-      //       throw err
-      //     }
-      //     console.log(data.toString())
-      //   })
-      // )
-
-      //Produces 'already piped' error, after typing for the second time
-      process.stdin.setEncoding('utf8');
+      // Write operation. Data sent as a buffer
+      pull(
+        p,
+        conn
+      )
+      // Sink, data converted from buffer to utf8 string
+      pull(
+        conn,
+        pull.map((data) => {
+          return data.toString('utf8').replace('\n','')
+        }),
+        pull.drain(console.log)
+      )
+      
+      process.stdin.setEncoding('utf8')
       process.openStdin().on('data', (chunk) => {
         var data = chunk.toString()
-        console.log(data);
-        pull(
-          pull.values(data),
-          conn
-        )
+        p.push(data)
       })
     })
   })
