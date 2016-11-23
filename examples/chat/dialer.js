@@ -54,6 +54,7 @@ async.parallel([
         throw err
       }
       console.log('nodeA dialed to nodeB on protocol: /chat/1.0.0')
+      console.log('Type a message and see what happens')
       // Write operation. Data sent as a buffer
       pull(
         p,
@@ -63,11 +64,11 @@ async.parallel([
       pull(
         conn,
         pull.map((data) => {
-          return data.toString('utf8').replace('\n','')
+          return data.toString('utf8').replace('\n', '')
         }),
         pull.drain(console.log)
       )
-      
+
       process.stdin.setEncoding('utf8')
       process.openStdin().on('data', (chunk) => {
         var data = chunk.toString()

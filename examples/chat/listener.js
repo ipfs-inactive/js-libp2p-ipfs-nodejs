@@ -27,7 +27,6 @@ PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
     })
 
     nodeListener.handle('/chat/1.0.0', (protocol, conn) => {
-
       pull(
         p,
         conn
@@ -36,7 +35,7 @@ PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
       pull(
         conn,
         pull.map((data) => {
-          return data.toString('utf8').replace('\n','')
+          return data.toString('utf8').replace('\n', '')
         }),
         pull.drain(console.log)
       )
