@@ -74,12 +74,12 @@ describe('libp2p-ipfs', () => {
 
   it('start 6 nodes', (done) => {
     parallel([
-      nodeA.start,
-      nodeB.start,
-      nodeC.start,
-      nodeD.start,
-      nodeE.start,
-      nodeF.start
+      (cb) => nodeA.start(cb),
+      (cb) => nodeB.start(cb),
+      (cb) => nodeC.start(cb),
+      (cb) => nodeD.start(cb),
+      (cb) => nodeE.start(cb),
+      (cb) => nodeF.start(cb)
     ], (err) => {
       expect(err).to.not.exist
       expect(nodeA.peerInfo.multiaddrs.length > 1).to.equal(true)
@@ -416,12 +416,12 @@ describe('libp2p-ipfs', () => {
 
   it('stop', (done) => {
     parallel([
-      nodeA.stop,
-      nodeB.stop,
-      nodeC.stop,
-      nodeD.stop,
-      nodeE.stop,
-      nodeF.stop
+      (cb) => nodeA.stop(cb),
+      (cb) => nodeB.stop(cb),
+      (cb) => nodeC.stop(cb),
+      (cb) => nodeD.stop(cb),
+      (cb) => nodeE.stop(cb),
+      (cb) => nodeF.stop(cb)
     ], done)
   })
 })
