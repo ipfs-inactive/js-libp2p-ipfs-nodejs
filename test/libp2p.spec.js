@@ -344,7 +344,9 @@ describe('libp2p-ipfs', () => {
     })
   })
 
-  it('nodeA fails to dial to nodeF', (done) => {
+  // Until https://github.com/libp2p/js-libp2p/issues/46 is resolved
+  // Everynode will be able to dial in WebSockets
+  it.skip('nodeA fails to dial to nodeF', (done) => {
     nodeA.dialByMultiaddr(nodeFMultiaddrWebSockets, (err) => {
       expect(err).to.exist
       const peers = nodeA.peerBook.getAll()
@@ -388,6 +390,7 @@ describe('libp2p-ipfs', () => {
     nodeA.dialByMultiaddr(maddr, '/echo/1.0.0', (err, conn) => {
       expect(err).to.not.exist
       const peers = nodeA.peerBook.getAll()
+
       expect(Object.keys(peers)).to.have.length(4)
 
       pull(
