@@ -14,7 +14,7 @@ libp2p-ipfs
 ![](https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square)
 ![](https://img.shields.io/badge/Node.js-%3E%3D4.0.0-orange.svg?style=flat-square)
 
-> libp2p build (module) used in js-ipfs
+> libp2p bundle (module) used in js-ipfs when run in Node.js
 
 This libp2p build has support for:
 
@@ -45,20 +45,12 @@ This libp2p build has support for:
 ### Use in Node.js
 
 ```js
-const lip2p = require('libp2p-ipfs')
+const libp2p = require('libp2p-ipfs')
 ```
 
 ## Usage
 
 ## API
-
-## Examples
-
-- Start two libp2p Nodes (create and make them listen)
-- Set up a handler for a protocol (through multistream)
-- Dial from one Node to the other using just one transport (TCP or uTP, and without SPDY or Yamux)
-- Dial from one Node to the other using one transport and one Stream Multiplexer
-- Dial from one Node to the other having set up secio
 
 ## Contribute
 
