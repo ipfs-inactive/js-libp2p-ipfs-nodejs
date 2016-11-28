@@ -2,7 +2,7 @@
 
 'use strict'
 
-const libp2p = require('../src')
+const Node = require('../src')
 const PeerInfo = require('peer-info')
 const PeerId = require('peer-id')
 const multiaddr = require('multiaddr')
@@ -19,7 +19,7 @@ PeerId.createFromJSON(idBak, (err, id) => {
 
   pInfo.multiaddr.add(maddr)
 
-  const node = new libp2p.Node(pInfo)
+  const node = new Node(pInfo)
 
   node.handle('/echo/1.0.0', (protocol, conn) => {
     pull(conn, conn)

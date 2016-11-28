@@ -28,6 +28,4 @@ class Node extends libp2p.Node {
   }
 }
 
-module.exports = {
-  Node: Node
-}
+module.exports = Node

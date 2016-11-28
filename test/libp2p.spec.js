@@ -2,7 +2,7 @@
 /* eslint-env mocha */
 
 const expect = require('chai').expect
-const libp2p = require('../src')
+const Node = require('../src')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
 const parallel = require('async/parallel')
@@ -44,11 +44,11 @@ describe('libp2p-ipfs', () => {
         info.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
       })
 
-      nodeA = new libp2p.Node(infos[0])
-      nodeB = new libp2p.Node(infos[1])
-      nodeC = new libp2p.Node(infos[2])
-      nodeD = new libp2p.Node(infos[3])
-      nodeE = new libp2p.Node(infos[4])
+      nodeA = new Node(infos[0])
+      nodeB = new Node(infos[1])
+      nodeC = new Node(infos[2])
+      nodeD = new Node(infos[3])
+      nodeE = new Node(infos[4])
       const maddrWS1 = multiaddr('/ip4/127.0.0.1/tcp/25001/ws')
       nodeE.peerInfo.multiaddr.add(maddrWS1)
 
@@ -61,7 +61,7 @@ describe('libp2p-ipfs', () => {
       const maddrWS2 = multiaddr('/ip4/127.0.0.1/tcp/25002/ws')
       pInfo.multiaddr.add(maddrWS2)
 
-      nodeF = new libp2p.Node(pInfo)
+      nodeF = new Node(pInfo)
 
       nodeFMultiaddrWebSockets = multiaddr(
         nodeF.peerInfo.multiaddrs[0].toString() +

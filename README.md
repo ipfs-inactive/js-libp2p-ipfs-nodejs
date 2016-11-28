@@ -45,7 +45,7 @@ This libp2p build has support for:
 ### Use in Node.js
 
 ```js
-const libp2p = require('libp2p-ipfs')
+const Node = require('libp2p-ipfs')
 ```
 
 ## Usage
