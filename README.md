@@ -1,5 +1,5 @@
-libp2p-ipfs
-===========
+libp2p-ipfs-nodejs
+==================
 
 ![](https://github.com/libp2p/js-libp2p/raw/1e3e9db84d1e5fdd5682cc5e0fdaabfcd07ad55a/img/js-libp2p-ipfs.png?raw=true)
 
@@ -14,7 +14,7 @@ libp2p-ipfs
 ![](https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square)
 ![](https://img.shields.io/badge/Node.js-%3E%3D4.0.0-orange.svg?style=flat-square)
 
-> libp2p bundle (module) used in js-ipfs when run in Node.js
+> libp2p bundle (module) used in js-ipfs when run in Node.js. If you are looking for the browser version, see [libp2p-ipfs-browser](https://github.com/ipfs/js-libp2p-ipfs-browser)
 
 This libp2p build has support for:
 
@@ -39,13 +39,13 @@ This libp2p build has support for:
 ### npm
 
 ```sh
-> npm i libp2p-ipfs
+> npm i libp2p-ipfs-nodejs
 ```
 
 ### Use in Node.js
 
 ```js
-const Node = require('libp2p-ipfs')
+const Node = require('libp2p-ipfs-nodejs')
 ```
 
 ## Usage
