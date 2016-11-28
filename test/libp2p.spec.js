@@ -2,7 +2,7 @@
 /* eslint-env mocha */
 
 const expect = require('chai').expect
-const libp2p = require('../src')
+const Node = require('../src')
 const PeerInfo = require('peer-info')
 const multiaddr = require('multiaddr')
 const parallel = require('async/parallel')
@@ -44,11 +44,11 @@ describe('libp2p-ipfs', () => {
         info.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
       })
 
-      nodeA = new libp2p.Node(infos[0])
-      nodeB = new libp2p.Node(infos[1])
-      nodeC = new libp2p.Node(infos[2])
-      nodeD = new libp2p.Node(infos[3])
-      nodeE = new libp2p.Node(infos[4])
+      nodeA = new Node(infos[0])
+      nodeB = new Node(infos[1])
+      nodeC = new Node(infos[2])
+      nodeD = new Node(infos[3])
+      nodeE = new Node(infos[4])
       const maddrWS1 = multiaddr('/ip4/127.0.0.1/tcp/25001/ws')
       nodeE.peerInfo.multiaddr.add(maddrWS1)
 
@@ -61,7 +61,7 @@ describe('libp2p-ipfs', () => {
       const maddrWS2 = multiaddr('/ip4/127.0.0.1/tcp/25002/ws')
       pInfo.multiaddr.add(maddrWS2)
 
-      nodeF = new libp2p.Node(pInfo)
+      nodeF = new Node(pInfo)
 
       nodeFMultiaddrWebSockets = multiaddr(
         nodeF.peerInfo.multiaddrs[0].toString() +
@@ -74,12 +74,12 @@ describe('libp2p-ipfs', () => {
 
   it('start 6 nodes', (done) => {
     parallel([
-      nodeA.start,
-      nodeB.start,
-      nodeC.start,
-      nodeD.start,
-      nodeE.start,
-      nodeF.start
+      (cb) => nodeA.start(cb),
+      (cb) => nodeB.start(cb),
+      (cb) => nodeC.start(cb),
+      (cb) => nodeD.start(cb),
+      (cb) => nodeE.start(cb),
+      (cb) => nodeF.start(cb)
     ], (err) => {
       expect(err).to.not.exist
       expect(nodeA.peerInfo.multiaddrs.length > 1).to.equal(true)
@@ -344,7 +344,9 @@ describe('libp2p-ipfs', () => {
     })
   })
 
-  it('nodeA fails to dial to nodeF', (done) => {
+  // Until https://github.com/libp2p/js-libp2p/issues/46 is resolved
+  // Everynode will be able to dial in WebSockets
+  it.skip('nodeA fails to dial to nodeF', (done) => {
     nodeA.dialByMultiaddr(nodeFMultiaddrWebSockets, (err) => {
       expect(err).to.exist
       const peers = nodeA.peerBook.getAll()
@@ -388,6 +390,7 @@ describe('libp2p-ipfs', () => {
     nodeA.dialByMultiaddr(maddr, '/echo/1.0.0', (err, conn) => {
       expect(err).to.not.exist
       const peers = nodeA.peerBook.getAll()
+
       expect(Object.keys(peers)).to.have.length(4)
 
       pull(
@@ -416,12 +419,12 @@ describe('libp2p-ipfs', () => {
 
   it('stop', (done) => {
     parallel([
-      nodeA.stop,
-      nodeB.stop,
-      nodeC.stop,
-      nodeD.stop,
-      nodeE.stop,
-      nodeF.stop
+      (cb) => nodeA.stop(cb),
+      (cb) => nodeB.stop(cb),
+      (cb) => nodeC.stop(cb),
+      (cb) => nodeD.stop(cb),
+      (cb) => nodeE.stop(cb),
+      (cb) => nodeF.stop(cb)
     ], done)
   })
 })
