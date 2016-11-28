@@ -7,7 +7,7 @@ const spdy = require('libp2p-spdy')
 const secio = require('libp2p-secio')
 const libp2p = require('libp2p')
 
-class Node extends libp2p.Node {
+class Node extends libp2p {
   constructor (peerInfo, peerBook) {
     const modules = {
       transport: [

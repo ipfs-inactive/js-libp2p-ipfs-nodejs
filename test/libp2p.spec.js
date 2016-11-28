@@ -11,7 +11,7 @@ const spawn = require('child_process').spawn
 const path = require('path')
 const pull = require('pull-stream')
 
-describe('libp2p-ipfs', () => {
+describe('libp2p-ipfs-nodejs', () => {
   let nodeA // TCP
   let nodeB // TCP
   let nodeC // TCP
