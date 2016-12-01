@@ -29,7 +29,8 @@
     "url": "https://github.com/ipfs/js-libp2p-ipfs-nodejs/issues"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=4.0.0",
+    "npm": ">=3.0.0"
   },
   "homepage": "https://github.com/ipfs/js-libp2p-ipfs-nodejs#readme",
   "devDependencies": {
@@ -40,7 +41,7 @@
     "pull-stream": "^3.5.0"
   },
   "dependencies": {
-    "libp2p": "^0.3.0",
+    "libp2p": "^0.3.1",
     "libp2p-secio": "^0.6.3",
     "libp2p-spdy": "^0.10.0",
     "libp2p-swarm": "^0.26.3",
