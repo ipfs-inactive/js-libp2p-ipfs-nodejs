@@ -405,6 +405,16 @@ describe('libp2p-ipfs-nodejs', () => {
     })
   })
 
+  it('nodeE ping to nodeF', (done) => {
+    nodeE.pingByPeerInfo(nodeF.peerInfo, (err, ping) => {
+      expect(err).to.not.exist
+      ping.once('ping', (time) => {
+        ping.stop()
+        done()
+      })
+    })
+  })
+
   it('crash that node, make sure nodeA continues going steady', (done) => {
     spawnedNode.kill('SIGKILL')
 
