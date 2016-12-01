@@ -409,7 +409,7 @@ describe('libp2p-ipfs-nodejs', () => {
     nodeE.pingByPeerInfo(nodeF.peerInfo, (err, ping) => {
       expect(err).to.not.exist
       ping.once('ping', (time) => {
-        expect(time).to.be.above(1)
+        expect(time).to.be.above(0)
         ping.stop()
         done()
       })
