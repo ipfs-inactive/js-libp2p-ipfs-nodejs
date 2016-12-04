@@ -191,11 +191,11 @@ describe('libp2p-ipfs-nodejs', () => {
         }
       ], () => {
         pull(
-          pull.values([Buffer('hey')]),
+          pull.values([new Buffer('hey')]),
           conn,
           pull.collect((err, data) => {
             expect(err).to.not.exist
-            expect(data).to.be.eql([Buffer('hey')])
+            expect(data).to.be.eql([new Buffer('hey')])
             done()
           })
         )
@@ -274,11 +274,11 @@ describe('libp2p-ipfs-nodejs', () => {
         }
       ], () => {
         pull(
-          pull.values([Buffer('hey')]),
+          pull.values([new Buffer('hey')]),
           conn,
           pull.collect((err, data) => {
             expect(err).to.not.exist
-            expect(data).to.be.eql([Buffer('hey')])
+            expect(data).to.be.eql([new Buffer('hey')])
             done()
           })
         )
@@ -394,11 +394,11 @@ describe('libp2p-ipfs-nodejs', () => {
       expect(Object.keys(peers)).to.have.length(4)
 
       pull(
-        pull.values([Buffer('hey')]),
+        pull.values([new Buffer('hey')]),
         conn,
         pull.collect((err, data) => {
           expect(err).to.not.exist
-          expect(data).to.be.eql([Buffer('hey')])
+          expect(data).to.be.eql([new Buffer('hey')])
           done()
         })
       )
