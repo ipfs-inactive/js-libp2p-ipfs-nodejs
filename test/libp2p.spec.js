@@ -10,27 +10,53 @@ const map = require('async/map')
 const spawn = require('child_process').spawn
 const path = require('path')
 const pull = require('pull-stream')
+const signalling = require('libp2p-webrtc-star/src/signalling')
 
 describe('libp2p-ipfs-nodejs', () => {
   let nodeA // TCP
-  let nodeB // TCP
-  let nodeC // TCP
-  let nodeD // TCP
-  let nodeE // TCP + WebSockets
-  let nodeF // WebSockets
-
   let nodeAMultiaddrTCP
+
+  let nodeB // TCP
   let nodeBMultiaddrTCP
+
+  let nodeC // TCP
   let nodeCMultiaddrTCP
+
+  let nodeD // TCP
   let nodeDMultiaddrTCP
+
+  let nodeE // TCP + WebSockets
   let nodeEMultiaddrTCP
   let nodeEMultiaddrWebSockets
+
+  let nodeF // WebSockets
   let nodeFMultiaddrWebSockets
+
+  let nodeG // TCP + WebRTC Star
+  // let nodeGMultiaddrTCP
+  let nodeGMultiaddrWebRTCStar
+
+  let nodeH // WebRTC Star
+  let nodeHMultiaddrWebRTCStar
 
   let spawnedNode
 
-  it('create 6 nodes', (done) => {
-    map([0, 1, 2, 3, 4, 5], (i, cb) => {
+  let ss
+
+  before((done) => {
+    signalling.start({ port: 24642 }, (err, server) => {
+      expect(err).to.not.exist
+      ss = server
+      done()
+    })
+  })
+
+  after((done) => {
+    ss.stop(done)
+  })
+
+  it('create 8 nodes', (done) => {
+    map([0, 1, 2, 3, 4, 5, 6, 7], (i, cb) => {
       PeerInfo.create(cb)
     }, (err, infos) => {
       if (err) {
@@ -38,7 +64,8 @@ describe('libp2p-ipfs-nodejs', () => {
       }
 
       infos.forEach((info, i) => {
-        if (i === 5) {
+        // skip nodeF and nodeH
+        if (i === 5 || i === 7) {
           return
         }
         info.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
@@ -49,6 +76,11 @@ describe('libp2p-ipfs-nodejs', () => {
       nodeC = new Node(infos[2])
       nodeD = new Node(infos[3])
       nodeE = new Node(infos[4])
+      nodeF = new Node(infos[5])
+      nodeG = new Node(infos[6])
+      nodeH = new Node(infos[7])
+
+      // add WebSockets to nodeE
       const maddrWS1 = multiaddr('/ip4/127.0.0.1/tcp/25001/ws')
       nodeE.peerInfo.multiaddr.add(maddrWS1)
 
@@ -57,29 +89,41 @@ describe('libp2p-ipfs-nodejs', () => {
         '/ipfs/' + nodeE.peerInfo.id.toB58String()
       )
 
-      const pInfo = infos[5]
+      // add WebSockets to nodeF
       const maddrWS2 = multiaddr('/ip4/127.0.0.1/tcp/25002/ws')
-      pInfo.multiaddr.add(maddrWS2)
-
-      nodeF = new Node(pInfo)
+      nodeF.peerInfo.multiaddr.add(maddrWS2)
 
       nodeFMultiaddrWebSockets = multiaddr(
         nodeF.peerInfo.multiaddrs[0].toString() +
         '/ipfs/' + nodeF.peerInfo.id.toB58String()
       )
 
+      // add WebRTC Star to nodeG
+      nodeGMultiaddrWebRTCStar = multiaddr(
+          '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws' +
+          '/ipfs/' + nodeG.peerInfo.id.toB58String())
+      nodeG.peerInfo.multiaddr.add(nodeGMultiaddrWebRTCStar)
+
+      // add WebRTC Star to nodeH
+      nodeHMultiaddrWebRTCStar = multiaddr(
+          '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws' +
+          '/ipfs/' + nodeH.peerInfo.id.toB58String())
+      nodeH.peerInfo.multiaddr.add(nodeHMultiaddrWebRTCStar)
+
       done()
     })
   })
 
-  it('start 6 nodes', (done) => {
+  it('start 8 nodes', (done) => {
     parallel([
       (cb) => nodeA.start(cb),
       (cb) => nodeB.start(cb),
       (cb) => nodeC.start(cb),
       (cb) => nodeD.start(cb),
       (cb) => nodeE.start(cb),
-      (cb) => nodeF.start(cb)
+      (cb) => nodeF.start(cb),
+      (cb) => nodeG.start(cb),
+      (cb) => nodeH.start(cb)
     ], (err) => {
       expect(err).to.not.exist
       expect(nodeA.peerInfo.multiaddrs.length > 1).to.equal(true)
@@ -88,6 +132,8 @@ describe('libp2p-ipfs-nodejs', () => {
       expect(nodeD.peerInfo.multiaddrs.length > 1).to.equal(true)
       expect(nodeE.peerInfo.multiaddrs.length > 2).to.equal(true)
       expect(nodeF.peerInfo.multiaddrs.length).to.equal(1)
+      expect(nodeG.peerInfo.multiaddrs.length > 2).to.equal(true)
+      expect(nodeH.peerInfo.multiaddrs.length).to.equal(1)
       done()
     })
   })
@@ -124,15 +170,9 @@ describe('libp2p-ipfs-nodejs', () => {
       '/ipfs/' + nodeE.peerInfo.id.toB58String()
       ).replace('0.0.0.0', '127.0.0.1')
     )
-
-    // console.log(nodeAMultiaddrTCP.toString())
-    // console.log(nodeBMultiaddrTCP.toString())
-    // console.log(nodeCMultiaddrTCP.toString())
-    // console.log(nodeDMultiaddrTCP.toString())
-    // console.log(nodeEMultiaddrTCP.toString())
   })
 
-  it('handle echo proto in 6 nodes', () => {
+  it('handle echo proto in 8 nodes', () => {
     function echo (protocol, conn) {
       pull(conn, conn)
     }
@@ -143,6 +183,8 @@ describe('libp2p-ipfs-nodejs', () => {
     nodeD.handle('/echo/1.0.0', echo)
     nodeE.handle('/echo/1.0.0', echo)
     nodeF.handle('/echo/1.0.0', echo)
+    nodeG.handle('/echo/1.0.0', echo)
+    nodeH.handle('/echo/1.0.0', echo)
   })
 
   // General connectivity tests
@@ -369,6 +411,13 @@ describe('libp2p-ipfs-nodejs', () => {
     })
   })
 
+  it('nodeG dial to nodeH', (done) => {
+    nodeG.dialByMultiaddr(nodeHMultiaddrWebRTCStar, (err) => {
+      expect(err).to.not.exist
+      done()
+    })
+  })
+
   // Turbolence tests
 
   it('spawn a node in a different process', (done) => {
@@ -435,7 +484,9 @@ describe('libp2p-ipfs-nodejs', () => {
       (cb) => nodeC.stop(cb),
       (cb) => nodeD.stop(cb),
       (cb) => nodeE.stop(cb),
-      (cb) => nodeF.stop(cb)
+      (cb) => nodeF.stop(cb),
+      (cb) => nodeG.stop(cb),
+      (cb) => nodeH.stop(cb)
     ], done)
   })
 })
