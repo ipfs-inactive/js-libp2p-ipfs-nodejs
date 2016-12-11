@@ -71,8 +71,8 @@ describe('libp2p-ipfs-nodejs', () => {
         info.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
       })
 
-      nodeA = new Node(infos[0])
-      nodeB = new Node(infos[1])
+      nodeA = new Node(infos[0], undefined, { mdns: true })
+      nodeB = new Node(infos[1], undefined, { mdns: true })
       nodeC = new Node(infos[2])
       nodeD = new Node(infos[3])
       nodeE = new Node(infos[4])
@@ -134,6 +134,14 @@ describe('libp2p-ipfs-nodejs', () => {
       expect(nodeF.peerInfo.multiaddrs.length).to.equal(1)
       expect(nodeG.peerInfo.multiaddrs.length > 2).to.equal(true)
       expect(nodeH.peerInfo.multiaddrs.length).to.equal(1)
+      done()
+    })
+  })
+
+  it('mdns discovery', (done) => {
+    nodeA.discovery.once('peer', (peerInfo) => {
+      expect(nodeB.peerInfo.id.toB58String())
+        .to.eql(peerInfo.id.toB58String())
       done()
     })
   })
