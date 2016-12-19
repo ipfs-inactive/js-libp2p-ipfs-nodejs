@@ -34,17 +34,17 @@
   },
   "homepage": "https://github.com/ipfs/js-libp2p-ipfs-nodejs#readme",
   "devDependencies": {
-    "aegir": "^9.2.1",
+    "aegir": "^9.3.0",
     "async": "^2.1.4",
     "chai": "^3.5.0",
-    "pre-commit": "^1.2.0",
+    "pre-commit": "^1.2.2",
     "pull-stream": "^3.5.0"
   },
   "dependencies": {
     "libp2p": "^0.3.1",
     "libp2p-mdns": "^0.5.0",
-    "libp2p-secio": "^0.6.3",
-    "libp2p-spdy": "^0.10.0",
+    "libp2p-secio": "^0.6.4",
+    "libp2p-spdy": "^0.10.1",
     "libp2p-swarm": "^0.26.5",
     "libp2p-tcp": "^0.9.1",
     "libp2p-webrtc-star": "^0.7.0",
@@ -52,7 +52,7 @@
     "mafmt": "^2.1.2",
     "multiaddr": "^2.1.1",
     "peer-book": "^0.3.0",
-    "peer-id": "^0.8.0",
+    "peer-id": "^0.8.1",
     "peer-info": "^0.8.1"
   },
   "contributors": [
