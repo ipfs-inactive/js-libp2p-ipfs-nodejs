@@ -10,7 +10,7 @@ const map = require('async/map')
 const spawn = require('child_process').spawn
 const path = require('path')
 const pull = require('pull-stream')
-const signalling = require('libp2p-webrtc-star/src/signalling')
+const signalling = require('libp2p-webrtc-star/src/sig-server')
 
 describe('libp2p-ipfs-nodejs', () => {
   let nodeA // TCP
