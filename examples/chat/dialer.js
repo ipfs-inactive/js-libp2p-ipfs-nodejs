@@ -3,7 +3,7 @@
 
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
-const libp2p = require('../../src')
+const Node = require('../../src')
 const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
 // const toPull = require('stream-to-pull-stream')
@@ -33,7 +33,7 @@ async.parallel([
   if (err) throw err
   const peerDialer = new PeerInfo(ids[0])
   peerDialer.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
-  const nodeDialer = new libp2p.Node(peerDialer)
+  const nodeDialer = new Node(peerDialer)
 
   const peerListener = new PeerInfo(ids[1])
   idListener = ids[1]
