@@ -3,7 +3,7 @@
 
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
-const libp2p = require('../../src')
+const Node = require('../../src')
 const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
 const Pushable = require('pull-pushable')
@@ -15,7 +15,7 @@ PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
   }
   const peerListener = new PeerInfo(idListener)
   peerListener.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/10333'))
-  const nodeListener = new libp2p.Node(peerListener)
+  const nodeListener = new Node(peerListener)
 
   nodeListener.start((err) => {
     if (err) {
