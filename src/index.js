@@ -34,7 +34,7 @@ class Node extends libp2p {
     }
 
     if (options.mdns) {
-      modules.discovery.push(new MulticastDNS(peerInfo))
+      modules.discovery.push(new MulticastDNS(peerInfo, 'ipfs.local'))
     }
 
     super(modules, peerInfo, peerBook, options)
