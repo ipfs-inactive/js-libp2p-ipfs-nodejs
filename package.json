@@ -45,7 +45,7 @@
     "libp2p-mdns": "^0.5.2",
     "libp2p-secio": "^0.6.5",
     "libp2p-spdy": "^0.10.3",
-    "libp2p-swarm": "^0.26.8",
+    "libp2p-swarm": "^0.26.9",
     "libp2p-tcp": "^0.9.1",
     "libp2p-webrtc-star": "^0.8.0",
     "libp2p-websockets": "^0.9.1",
