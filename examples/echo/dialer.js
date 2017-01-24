@@ -1,65 +1,54 @@
 'use strict'
 /* eslint-disable no-console */
 
+/*
+ * Dialer Node
+ */
+
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const Node = require('../../src')
 const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
 const async = require('async')
-let idListener
 
 async.parallel([
-  (callback) => {
-    PeerId.createFromJSON(require('./peer-id-dialer'), (err, idDialer) => {
-      if (err) {
-        throw err
-      }
-      callback(null, idDialer)
-    })
-  },
-  (callback) => {
-    PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
-      if (err) {
-        throw err
-      }
-      callback(null, idListener)
-    })
-  }
+  (cb) => PeerId.createFromJSON(require('./id-d'), cb),
+  (cb) => PeerId.createFromJSON(require('./id-l'), cb)
 ], (err, ids) => {
-  if (err) throw err
-  const peerDialer = new PeerInfo(ids[0])
-  peerDialer.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
-  const nodeDialer = new Node(peerDialer)
+  if (err) { throw err }
 
-  const peerListener = new PeerInfo(ids[1])
-  idListener = ids[1]
-  peerListener.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/10333'))
-  nodeDialer.start((err) => {
-    if (err) {
-      throw err
-    }
+  // Dialer
+  const dialerId = ids[0]
+  const dialerPeerInfo = new PeerInfo(dialerId)
+  dialerPeerInfo.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/0'))
+  const dialerNode = new Node(dialerPeerInfo)
+
+  // Peer to Dial
+  const listenerPeerInfo = new PeerInfo(ids[1])
+  const listenerId = ids[1]
+  const listenerMultiaddr = multiaddr('/ip4/127.0.0.1/tcp/10333/ipfs/' +
+      listenerId.toB58String())
+  listenerPeerInfo.multiaddr.add(listenerMultiaddr)
+
+  dialerNode.start((err) => {
+    if (err) { throw err }
 
     console.log('Dialer ready, listening on:')
+    dialerPeerInfo.multiaddrs.forEach((ma) => console.log(ma.toString() +
+          '/ipfs/' + dialerId.toB58String()))
 
-    peerListener.multiaddrs.forEach((ma) => {
-      console.log(ma.toString() + '/ipfs/' + idListener.toB58String())
-    })
+    console.log('Dialing to peer:', listenerMultiaddr.toString())
+    dialerNode.dialByPeerInfo(listenerPeerInfo, '/echo/1.0.0', (err, conn) => {
+      if (err) { throw err }
 
-    nodeDialer.dialByPeerInfo(peerListener, '/echo/1.0.0', (err, conn) => {
-      if (err) {
-        throw err
-      }
       console.log('nodeA dialed to nodeB on protocol: /echo/1.0.0')
 
       pull(
         pull.values(['hey']),
         conn,
-        pull.through(console.log),
         pull.collect((err, data) => {
-          if (err) {
-            throw err
-          }
+          if (err) { throw err }
           console.log('received echo:', data.toString())
         })
       )
