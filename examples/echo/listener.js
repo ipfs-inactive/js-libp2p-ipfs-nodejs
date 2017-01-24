@@ -1,51 +1,46 @@
 'use strict'
 /* eslint-disable no-console */
 
+/*
+ * Listener Node
+ */
+
 const PeerId = require('peer-id')
 const PeerInfo = require('peer-info')
 const Node = require('../../src')
 const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
+const series = require('async/series')
 
-PeerId.createFromJSON(require('./peer-id-listener'), (err, idListener) => {
-  if (err) {
-    throw err
+let listenerId
+let listenerNode
+
+series([
+  (cb) => {
+    PeerId.createFromJSON(require('./id-l'), (err, id) => {
+      if (err) { return cb(err) }
+      listenerId = id
+      cb()
+    })
+  },
+  (cb) => {
+    const listenerPeerInfo = new PeerInfo(listenerId)
+    listenerPeerInfo.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/10333'))
+    listenerNode = new Node(listenerPeerInfo)
+
+    listenerNode.swarm.on('peer-mux-established', (peerInfo) => {
+      console.log('received dial to me from:', peerInfo.id.toB58String())
+    })
+
+    listenerNode.handle('/echo/1.0.0', (protocol, conn) => pull(conn, conn))
+
+    listenerNode.start(cb)
   }
-  const peerListener = new PeerInfo(idListener)
-  peerListener.multiaddr.add(multiaddr('/ip4/0.0.0.0/tcp/10333'))
-  const nodeListener = new Node(peerListener)
+], (err) => {
+  if (err) { throw err }
 
-  nodeListener.start((err) => {
-    if (err) {
-      throw err
-    }
-
-    nodeListener.swarm.on('peer-mux-established', (peerInfo) => {
-      console.log(peerInfo.id.toB58String())
-    })
-
-    nodeListener.handle('/echo/1.0.0', (protocol, conn) => {
-      pull(
-        conn,
-        conn
-      )
-    })
-
-    nodeListener.handle('/hello/1.0.0', (protocol, conn) => {
-      pull(
-        pull.values(['hello', 'world']),
-        conn
-      )
-      setTimeout(() => {
-        console.log('Printing my peerbook')
-        Object
-          .keys(nodeListener.peerBook.getAll())
-          .forEach(console.log)
-      }, 500)
-    })
-    console.log('Listener ready, listening on:')
-    peerListener.multiaddrs.forEach((ma) => {
-      console.log(ma.toString() + '/ipfs/' + idListener.toB58String())
-    })
+  console.log('Listener ready, listening on:')
+  listenerNode.peerInfo.multiaddrs.forEach((ma) => {
+    console.log(ma.toString() + '/ipfs/' + listenerId.toB58String())
   })
 })
