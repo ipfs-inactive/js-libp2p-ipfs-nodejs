@@ -34,7 +34,14 @@ async.parallel([
 
   const peerListener = new PeerInfo(ids[1])
   idListener = ids[1]
-  peerListener.multiaddr.add(multiaddr('/ip4/127.0.0.1/tcp/10333'))
+
+  let toDial = '/ip4/127.0.0.1/tcp/10333'
+
+  if (process.argv[2] !== undefined) {
+    toDial = process.argv[2]
+  }
+
+  peerListener.multiaddr.add(multiaddr(toDial))
   nodeDialer.start((err) => {
     if (err) {
       throw err
@@ -55,12 +62,14 @@ async.parallel([
       pull(
         pull.values(['hey']),
         conn,
-        pull.through(console.log),
+        pull.through((data) => {
+          console.log('received data:', data.toString())
+        }),
         pull.collect((err, data) => {
           if (err) {
             throw err
           }
-          console.log('received echo:', data.toString())
+          console.log('stream ended')
         })
       )
     })
