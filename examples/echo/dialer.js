@@ -62,14 +62,8 @@ async.parallel([
       pull(
         pull.values(['hey']),
         conn,
-        pull.through((data) => {
-          console.log('received data:', data.toString())
-        }),
-        pull.collect((err, data) => {
-          if (err) {
-            throw err
-          }
-          console.log('stream ended')
+        pull.drain((data) => {
+          console.log('got data: ' + data)
         })
       )
     })
