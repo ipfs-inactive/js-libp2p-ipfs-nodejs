@@ -4,7 +4,7 @@
   "description": "The libp2p build (module) used by js-ipfs on Node.js",
   "main": "src/index.js",
   "scripts": {
-    "test": "aegir-test node",
+    "test": "npm run test:muxer:spdy && npm run test:muxer:multiplex",
     "test:muxer:spdy": "LIBP2P_MUXER=spdy aegir-test node",
     "test:muxer:multiplex": "LIBP2P_MUXER=multiplex aegir-test node",
     "test:muxer:both": "LIBP2P_MUXER=spdy, multiplex aegir-test node",
@@ -46,10 +46,10 @@
   "dependencies": {
     "libp2p": "^0.3.1",
     "libp2p-mdns": "^0.5.2",
-    "libp2p-multiplex": "^0.3.3",
+    "libp2p-multiplex": "^0.3.4",
     "libp2p-secio": "^0.6.5",
     "libp2p-spdy": "^0.10.3",
-    "libp2p-swarm": "^0.26.11",
+    "libp2p-swarm": "^0.26.13",
     "libp2p-tcp": "^0.9.1",
     "libp2p-webrtc-star": "^0.8.1",
     "libp2p-websockets": "^0.9.1",
