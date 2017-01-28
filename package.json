@@ -51,7 +51,7 @@
     "libp2p-spdy": "^0.10.3",
     "libp2p-swarm": "^0.26.13",
     "libp2p-tcp": "^0.9.1",
-    "libp2p-webrtc-star": "^0.8.3",
+    "libp2p-webrtc-star": "0.8.1",
     "libp2p-websockets": "^0.9.1",
     "mafmt": "^2.1.6",
     "multiaddr": "^2.2.0",
