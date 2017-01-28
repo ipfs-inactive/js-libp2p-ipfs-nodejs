@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "libp2p": "^0.3.1",
-    "libp2p-mdns": "^0.5.2",
+    "libp2p-mdns": "^0.6.0",
     "libp2p-multiplex": "^0.3.4",
     "libp2p-secio": "^0.6.5",
     "libp2p-spdy": "^0.10.3",
