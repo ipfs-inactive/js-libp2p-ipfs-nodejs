@@ -5,6 +5,7 @@ const TCP = require('libp2p-tcp')
 const WebRTCStar = require('libp2p-webrtc-star')
 const MulticastDNS = require('libp2p-mdns')
 const WS = require('libp2p-websockets')
+const Railing = require('libp2p-railing')
 const spdy = require('libp2p-spdy')
 const multiplex = require('libp2p-multiplex')
 const secio = require('libp2p-secio')
@@ -42,7 +43,13 @@ class Node extends libp2p {
     }
 
     if (options.mdns) {
-      modules.discovery.push(new MulticastDNS(peerInfo, 'ipfs.local'))
+      const mdns = new MulticastDNS(peerInfo, 'ipfs.local')
+      modules.discovery.push(mdns)
+    }
+
+    if (options.bootstrap && process.env.IPFS_BOOTSTRAP) {
+      const r = new Railing(options.bootstrap)
+      modules.discovery.push(r)
     }
 
     super(modules, peerInfo, peerBook, options)
