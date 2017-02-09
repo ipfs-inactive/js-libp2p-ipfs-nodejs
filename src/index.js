@@ -40,7 +40,7 @@ class Node extends libp2p {
       discovery: []
     }
 
-    if (options.webrtc) {
+    if (options.webRTCStar) {
       modules.discovery.push(webRTCStar.discovery)
     }
 
