@@ -44,7 +44,7 @@
     "pull-stream": "^3.5.0"
   },
   "dependencies": {
-    "libp2p": "~0.5.2",
+    "libp2p": "0.5.1",
     "libp2p-mdns": "~0.6.1",
     "libp2p-multiplex": "~0.3.6",
     "libp2p-railing": "~0.4.1",
