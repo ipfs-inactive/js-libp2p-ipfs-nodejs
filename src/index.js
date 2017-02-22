@@ -11,6 +11,23 @@ const multiplex = require('libp2p-multiplex')
 const secio = require('libp2p-secio')
 const libp2p = require('libp2p')
 
+function getMuxers (options) {
+  if (process.env.LIBP2P_MUXER) {
+    const muxerPrefs = process.env.LIBP2P_MUXER
+    return muxerPrefs.split(',').map((pref) => {
+      switch (pref) {
+      case 'spdy': return spdy
+      case 'multiplex': return multiplex
+      default: throw new Error(pref + ' muxer not available')
+      }
+    })
+  } else if (options) {
+    return options
+  } else {
+    return [spdy, multiplex]
+  }
+}
+
 class Node extends libp2p {
   constructor (peerInfo, peerBook, options) {
     options = options || {}
@@ -23,16 +40,7 @@ class Node extends libp2p {
         webRTCStar
       ],
       connection: {
-        muxer: process.env.LIBP2P_MUXER ? (() => {
-          const muxerPrefs = process.env.LIBP2P_MUXER
-          return muxerPrefs.split(',').map((pref) => {
-            switch (pref) {
-              case 'spdy': return spdy
-              case 'multiplex': return multiplex
-              default: throw new Error(pref + ' muxer not available')
-            }
-          })
-        })() : [spdy],
+        muxer: getMuxers(),
         crypto: [
           secio
         ]
