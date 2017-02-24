@@ -34,7 +34,7 @@ function getMuxers (options) {
   } else if (options) {
     return mapMuxers(options)
   } else {
-    return [spdy, multiplex]
+    return [multiplex, spdy]
   }
 }
 
