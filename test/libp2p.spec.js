@@ -138,6 +138,23 @@ describe('libp2p-ipfs-nodejs', () => {
     })
   })
 
+  it('create libp2pNode with multiplex only', (done) => {
+    const old = process.env.LIBP2P_MUXER
+    process.env.LIBP2P_MUXER = ''
+    PeerInfo.create((err, info) => {
+      expect(err).to.not.exist
+      const b = new Node(info, null, {muxer: ['multiplex']})
+      expect(b.modules.connection.muxer).to.eql([
+        require('libp2p-multiplex')
+      ])
+
+      if (old) {
+        process.env.LIBP2P_MUXER = old
+      }
+      done()
+    })
+  })
+
   it('mdns discovery', (done) => {
     nodeA.discovery.once('peer', (peerInfo) => {
       expect(nodeB.peerInfo.id.toB58String())
