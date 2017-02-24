@@ -148,7 +148,9 @@ describe('libp2p-ipfs-nodejs', () => {
         require('libp2p-multiplex')
       ])
 
-      process.env.LIBP2P_MUXER = old
+      if (old) {
+        process.env.LIBP2P_MUXER = old
+      }
       done()
     })
   })
