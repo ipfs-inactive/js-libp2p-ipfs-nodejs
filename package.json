@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/ipfs/js-libp2p-ipfs-nodejs#readme",
   "devDependencies": {
-    "aegir": "^10.0.0",
+    "aegir": "^11.0.0",
     "async": "^2.1.5",
     "chai": "^3.5.0",
     "pre-commit": "^1.2.2",
