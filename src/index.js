@@ -67,7 +67,7 @@ class Node extends libp2p {
       modules.discovery.push(mdns)
     }
 
-    if (options.bootstrap && process.env.IPFS_BOOTSTRAP) {
+    if (options.bootstrap) {
       const r = new Railing(options.bootstrap)
       modules.discovery.push(r)
     }
