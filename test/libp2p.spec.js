@@ -145,7 +145,7 @@ describe('libp2p-ipfs-nodejs', () => {
     process.env.LIBP2P_MUXER = ''
     PeerInfo.create((err, info) => {
       expect(err).to.not.exist()
-      const b = new Node(info, null, {muxer: ['multiplex']})
+      const b = new Node(info, null, { muxer: ['multiplex'] })
       expect(b.modules.connection.muxer).to.eql([
         require('libp2p-multiplex')
       ])
@@ -158,7 +158,7 @@ describe('libp2p-ipfs-nodejs', () => {
   })
 
   it('mdns discovery', (done) => {
-    nodeA.discovery.once('peer', (peerInfo) => {
+    nodeA.once('peer', (peerInfo) => {
       expect(nodeB.peerInfo.id.toB58String())
         .to.eql(peerInfo.id.toB58String())
       done()
@@ -216,8 +216,8 @@ describe('libp2p-ipfs-nodejs', () => {
 
   // General connectivity tests
 
-  it('libp2p.dialByMultiaddr nodeA to nodeB', (done) => {
-    nodeA.dialByMultiaddr(nodeBMultiaddrTCP, (err) => {
+  it('libp2p.dial using Multiaddr nodeA to nodeB', (done) => {
+    nodeA.dial(nodeBMultiaddrTCP, (err) => {
       expect(err).to.not.exist()
       // Some time for Identify to finish
       setTimeout(check, 500)
@@ -238,12 +238,11 @@ describe('libp2p-ipfs-nodejs', () => {
           }
         ], done)
       }
-      // TODO confirm that we got the pubkey through identify
     })
   })
 
-  it('libp2p.dialByMultiaddr on Protocol nodeA to nodeB', (done) => {
-    nodeA.dialByMultiaddr(nodeBMultiaddrTCP, '/echo/1.0.0', (err, conn) => {
+  it('libp2p.dial using Multiaddr on Protocol nodeA to nodeB', (done) => {
+    nodeA.dial(nodeBMultiaddrTCP, '/echo/1.0.0', (err, conn) => {
       expect(err).to.not.exist()
       parallel([
         (cb) => {
@@ -272,8 +271,8 @@ describe('libp2p-ipfs-nodejs', () => {
     })
   })
 
-  it('libp2p.hangupByMultiaddr nodeA to nodeB', (done) => {
-    nodeA.hangUpByMultiaddr(nodeBMultiaddrTCP, (err) => {
+  it('libp2p.hangUp using Multiaddr nodeA to nodeB', (done) => {
+    nodeA.hangUp(nodeBMultiaddrTCP, (err) => {
       expect(err).to.not.exist()
       setTimeout(check, 500)
 
@@ -299,8 +298,8 @@ describe('libp2p-ipfs-nodejs', () => {
     })
   })
 
-  it('libp2p.dialByPeerInfo nodeA to nodeB', (done) => {
-    nodeA.dialByPeerInfo(nodeB.peerInfo, (err) => {
+  it('libp2p.dial using PeerInfo nodeA to nodeB', (done) => {
+    nodeA.dial(nodeB.peerInfo, (err) => {
       expect(err).to.not.exist()
       // Some time for Identify to finish
       setTimeout(check, 500)
@@ -325,8 +324,8 @@ describe('libp2p-ipfs-nodejs', () => {
     })
   })
 
-  it('libp2p.dialByPeerInfo on Protocol nodeA to nodeB', (done) => {
-    nodeA.dialByPeerInfo(nodeB.peerInfo, '/echo/1.0.0', (err, conn) => {
+  it('libp2p.dial using PeerInfo on Protocol nodeA to nodeB', (done) => {
+    nodeA.dial(nodeB.peerInfo, '/echo/1.0.0', (err, conn) => {
       expect(err).to.not.exist()
       parallel([
         (cb) => {
@@ -355,8 +354,8 @@ describe('libp2p-ipfs-nodejs', () => {
     })
   })
 
-  it('libp2p.hangupByPeerInfo nodeA to nodeB', (done) => {
-    nodeA.hangUpByPeerInfo(nodeB.peerInfo, (err) => {
+  it('libp2p.hangUp using PeerInfo nodeA to nodeB', (done) => {
+    nodeA.hangUp(nodeB.peerInfo, (err) => {
       expect(err).to.not.exist()
       setTimeout(check, 500)
 
@@ -381,19 +380,13 @@ describe('libp2p-ipfs-nodejs', () => {
       }
     })
   })
-
-  // NOTE, these dialById only works if a previous dial was made
-  // until we have PeerRouting
-  it.skip('libp2p.dialById nodeA to nodeB', (done) => {})
-  it.skip('libp2p.dialById on Protocol nodeA to nodeB', (done) => {})
-  it.skip('libp2p.hangupById nodeA to nodeB', (done) => {})
 
   it('nodeA dial to nodeC and nodeD', (done) => {
     let count = 0
     const next = () => ++count === 2 ? check() : null
 
-    nodeA.dialByMultiaddr(nodeCMultiaddrTCP, next)
-    nodeA.dialByMultiaddr(nodeDMultiaddrTCP, next)
+    nodeA.dial(nodeCMultiaddrTCP, next)
+    nodeA.dial(nodeDMultiaddrTCP, next)
 
     function check () {
       const peers = nodeA.peerBook.getAll()
@@ -405,7 +398,7 @@ describe('libp2p-ipfs-nodejs', () => {
   // Multiple transport tests
 
   it('nodeA dial to nodeE', (done) => {
-    nodeA.dialByMultiaddr(nodeEMultiaddrTCP, (err) => {
+    nodeA.dial(nodeEMultiaddrTCP, (err) => {
       expect(err).to.not.exist()
       const peers = nodeA.peerBook.getAll()
       expect(Object.keys(peers)).to.have.length(3)
@@ -416,7 +409,7 @@ describe('libp2p-ipfs-nodejs', () => {
   // Until https://github.com/libp2p/js-libp2p/issues/46 is resolved
   // Everynode will be able to dial in WebSockets
   it.skip('nodeA fails to dial to nodeF', (done) => {
-    nodeA.dialByMultiaddr(nodeFMultiaddrWebSockets, (err) => {
+    nodeA.dial(nodeFMultiaddrWebSockets, (err) => {
       expect(err).to.exist()
       const peers = nodeA.peerBook.getAll()
       expect(Object.keys(peers)).to.have.length(3)
@@ -425,21 +418,21 @@ describe('libp2p-ipfs-nodejs', () => {
   })
 
   it('nodeF fails to dial to nodeA', (done) => {
-    nodeF.dialByMultiaddr(nodeAMultiaddrTCP, (err) => {
+    nodeF.dial(nodeAMultiaddrTCP, (err) => {
       expect(err).to.exist()
       done()
     })
   })
 
   it('nodeF dial to nodeE', (done) => {
-    nodeF.dialByMultiaddr(nodeEMultiaddrWebSockets, (err) => {
+    nodeF.dial(nodeEMultiaddrWebSockets, (err) => {
       expect(err).to.not.exist()
       done()
     })
   })
 
   it('nodeG dial to nodeH', (done) => {
-    nodeG.dialByMultiaddr(nodeHMultiaddrWebRTCStar, (err) => {
+    nodeG.dial(nodeHMultiaddrWebRTCStar, (err) => {
       expect(err).to.not.exist()
       done()
     })
@@ -475,7 +468,7 @@ describe('libp2p-ipfs-nodejs', () => {
     const spawnedId = require('./test-data/test-id.json')
     const maddr = multiaddr('/ip4/127.0.0.1/tcp/12345/ipfs/' + spawnedId.id)
 
-    nodeA.dialByMultiaddr(maddr, '/echo/1.0.0', (err, conn) => {
+    nodeA.dial(maddr, '/echo/1.0.0', (err, conn) => {
       expect(err).to.not.exist()
       const peers = nodeA.peerBook.getAll()
 
@@ -486,7 +479,7 @@ describe('libp2p-ipfs-nodejs', () => {
         conn,
         pull.collect((err, data) => {
           expect(err).to.not.exist()
-          expect(data).to.be.eql([new Buffer('hey')])
+          expect(data).to.eql([new Buffer('hey')])
           done()
         })
       )
@@ -494,7 +487,7 @@ describe('libp2p-ipfs-nodejs', () => {
   })
 
   it('nodeE ping to nodeF', (done) => {
-    nodeE.pingByPeerInfo(nodeF.peerInfo, (err, ping) => {
+    nodeE.ping(nodeF.peerInfo, (err, ping) => {
       expect(err).to.not.exist()
       ping.once('ping', (time) => {
         expect(time >= 0).to.be.true()
