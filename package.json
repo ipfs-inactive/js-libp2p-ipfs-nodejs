@@ -45,7 +45,7 @@
     "pull-stream": "^3.5.0"
   },
   "dependencies": {
-    "libp2p": "~0.5.5",
+    "libp2p": "~0.6.0",
     "libp2p-mdns": "~0.6.2",
     "libp2p-multiplex": "~0.4.3",
     "libp2p-railing": "~0.4.3",
@@ -57,9 +57,9 @@
     "libp2p-websockets": "~0.9.6",
     "mafmt": "^2.1.7",
     "multiaddr": "^2.2.3",
-    "peer-book": "~0.3.1",
-    "peer-id": "~0.8.4",
-    "peer-info": "~0.8.4"
+    "peer-book": "~0.3.2",
+    "peer-id": "~0.8.5",
+    "peer-info": "~0.8.5"
   },
   "contributors": [
     "David Dias <daviddias.p@gmail.com>",
