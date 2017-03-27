@@ -18,8 +18,8 @@ libp2p-ipfs-nodejs
 
 This libp2p build has support for:
 
-- TCP and WebSockets
-- SPDY stream multiplexing
+- TCP, WebRTC and WebSockets
+- SPDY and mplex stream multiplexing
 - secio encrypted channels
 - Identify STUN protocol
 
@@ -50,7 +50,15 @@ const Node = require('libp2p-ipfs-nodejs')
 
 ## Usage
 
+### Create a libp2p-ipfs-nodejs node
+
+```js
+// TODO - Create this example
+```
+
 ## API
+
+API docs can be found at https://github.com/libp2p/js-libp2p#usage
 
 ## Contribute
 
