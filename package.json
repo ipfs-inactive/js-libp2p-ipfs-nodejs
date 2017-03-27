@@ -54,7 +54,7 @@
     "libp2p-swarm": "~0.26.19",
     "libp2p-tcp": "~0.9.4",
     "libp2p-webrtc-star": "~0.8.10",
-    "libp2p-websockets": "~0.9.6",
+    "libp2p-websockets": "~0.10.0",
     "mafmt": "^2.1.7",
     "multiaddr": "^2.2.3",
     "peer-book": "~0.3.2",
