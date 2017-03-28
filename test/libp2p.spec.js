@@ -383,7 +383,13 @@ describe('libp2p-ipfs-nodejs', () => {
 
   it('nodeA dial to nodeC and nodeD', (done) => {
     let count = 0
-    const next = () => ++count === 2 ? check() : null
+
+    function next (err) {
+      expect(err).to.not.exist()
+      if (++count === 2) {
+        check()
+      }
+    }
 
     nodeA.dial(nodeCMultiaddrTCP, next)
     nodeA.dial(nodeDMultiaddrTCP, next)

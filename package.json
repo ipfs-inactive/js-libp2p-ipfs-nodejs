@@ -45,18 +45,18 @@
     "pull-stream": "^3.5.0"
   },
   "dependencies": {
-    "libp2p": "~0.6.1",
+    "libp2p": "~0.6.2",
     "libp2p-mdns": "~0.6.2",
     "libp2p-multiplex": "~0.4.3",
     "libp2p-railing": "~0.4.3",
     "libp2p-secio": "~0.6.8",
     "libp2p-spdy": "~0.10.6",
-    "libp2p-swarm": "~0.27.0",
+    "libp2p-swarm": "~0.28.0",
     "libp2p-tcp": "~0.10.0",
     "libp2p-webrtc-star": "~0.8.10",
     "libp2p-websockets": "~0.10.0",
-    "mafmt": "^2.1.7",
-    "multiaddr": "^2.2.3",
+    "mafmt": "^2.1.8",
+    "multiaddr": "^2.3.0",
     "peer-book": "~0.3.2",
     "peer-id": "~0.8.5",
     "peer-info": "~0.8.5"
