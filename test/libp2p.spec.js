@@ -6,6 +6,7 @@ chai.use(require('dirty-chai'))
 const expect = chai.expect
 const Node = require('../src')
 const PeerInfo = require('peer-info')
+const PeerId = require('peer-id')
 const multiaddr = require('multiaddr')
 const parallel = require('async/parallel')
 const map = require('async/map')
@@ -53,13 +54,14 @@ describe('libp2p-ipfs-nodejs', () => {
     })
   })
 
-  after((done) => {
-    ss.stop(done)
-  })
+  after((done) => ss.stop(done))
 
   it('create 8 nodes', (done) => {
     map([0, 1, 2, 3, 4, 5, 6, 7], (i, cb) => {
-      PeerInfo.create(cb)
+      PeerId.create({ bits: 1024 }, (err, id) => {
+        expect(err).to.not.exist()
+        PeerInfo.create(id, cb)
+      })
     }, (err, infos) => {
       if (err) {
         return done(err)
