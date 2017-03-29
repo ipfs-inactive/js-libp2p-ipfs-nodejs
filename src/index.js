@@ -17,22 +17,20 @@ function mapMuxers (list) {
       return pref
     }
     switch (pref.trim().toLowerCase()) {
-      case 'spdy':
-        return spdy
-      case 'multiplex':
-        return multiplex
+      case 'spdy': return spdy
+      case 'multiplex': return multiplex
       default:
         throw new Error(pref + ' muxer not available')
     }
   })
 }
 
-function getMuxers (options) {
-  if (process.env.LIBP2P_MUXER) {
-    const muxerPrefs = process.env.LIBP2P_MUXER
+function getMuxers (muxers) {
+  const muxerPrefs = process.env.LIBP2P_MUXER
+  if (muxerPrefs && !muxers) {
     return mapMuxers(muxerPrefs.split(','))
-  } else if (options) {
-    return mapMuxers(options)
+  } else if (muxers) {
+    return mapMuxers(muxers)
   } else {
     return [multiplex, spdy]
   }

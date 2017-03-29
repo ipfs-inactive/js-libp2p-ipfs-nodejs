@@ -14,7 +14,7 @@ const createNode = utils.createNode
 const echo = utils.echo
 
 describe('TCP + WebSockets + WebRTCStar', () => {
-  let nodeTCPnWSnWStar
+  let nodeAll
   let nodeTCP
   let nodeWS
   let nodeWStar
@@ -36,7 +36,7 @@ describe('TCP + WebSockets + WebRTCStar', () => {
         '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
       ], (err, node) => {
         expect(err).to.not.exist()
-        nodeTCPnWSnWStar = node
+        nodeAll = node
         node.handle('/echo/1.0.0', echo)
         node.start(cb)
       }),
@@ -69,7 +69,7 @@ describe('TCP + WebSockets + WebRTCStar', () => {
 
   after((done) => {
     parallel([
-      (cb) => nodeTCPnWSnWStar.stop(cb),
+      (cb) => nodeAll.stop(cb),
       (cb) => nodeTCP.stop(cb),
       (cb) => nodeWS.stop(cb),
       (cb) => nodeWStar.stop(cb),
@@ -77,10 +77,159 @@ describe('TCP + WebSockets + WebRTCStar', () => {
     ], done)
   })
 
-  it.skip('nodeAll.dial nodeTCP using PeerInfo', (done) => {})
-  it.skip('nodeAll.hangUp nodeTCP using PeerInfo', (done) => {})
-  it.skip('nodeAll.dial nodeWS using PeerInfo', (done) => {})
-  it.skip('nodeAll.hangUp nodeWS using PeerInfo', (done) => {})
-  it.skip('nodeAll.dial nodeWS using PeerInfo', (done) => {})
-  it.skip('nodeAll.hangUp nodeWebRTCStar using PeerInfo', (done) => {})
+  it('nodeAll.dial nodeTCP using PeerInfo', (done) => {
+    nodeAll.dial(nodeTCP.peerInfo, (err) => {
+      expect(err).to.not.exist()
+
+      // Some time for Identify to finish
+      setTimeout(check, 500)
+
+      function check () {
+        parallel([
+          (cb) => {
+            const peers = nodeAll.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(1)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeTCP.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(1)
+            cb()
+          }
+        ], done)
+      }
+    })
+  })
+
+  it('nodeAll.hangUp nodeTCP using PeerInfo', (done) => {
+    nodeAll.hangUp(nodeTCP.peerInfo, (err) => {
+      expect(err).to.not.exist()
+      setTimeout(check, 500)
+
+      function check () {
+        parallel([
+          (cb) => {
+            const peers = nodeAll.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(nodeAll.swarm.muxedConns)).to.have.length(0)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeTCP.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(nodeTCP.swarm.muxedConns)).to.have.length(0)
+            cb()
+          }
+        ], done)
+      }
+    })
+  })
+
+  it('nodeAll.dial nodeWS using PeerInfo', (done) => {
+    nodeAll.dial(nodeWS.peerInfo, (err) => {
+      expect(err).to.not.exist()
+
+      // Some time for Identify to finish
+      setTimeout(check, 500)
+
+      function check () {
+        parallel([
+          (cb) => {
+            const peers = nodeAll.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(1)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeWS.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(1)
+            cb()
+          }
+        ], done)
+      }
+    })
+  })
+
+  it('nodeAll.hangUp nodeWS using PeerInfo', (done) => {
+    nodeAll.hangUp(nodeWS.peerInfo, (err) => {
+      expect(err).to.not.exist()
+      setTimeout(check, 500)
+
+      function check () {
+        parallel([
+          (cb) => {
+            const peers = nodeAll.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(nodeAll.swarm.muxedConns)).to.have.length(0)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeWS.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(nodeWS.swarm.muxedConns)).to.have.length(0)
+            cb()
+          }
+        ], done)
+      }
+    })
+  })
+
+  it('nodeAll.dial nodeWStar using PeerInfo', (done) => {
+    nodeAll.dial(nodeWStar.peerInfo, (err) => {
+      expect(err).to.not.exist()
+
+      // Some time for Identify to finish
+      setTimeout(check, 500)
+
+      function check () {
+        parallel([
+          (cb) => {
+            const peers = nodeAll.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(1)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeWStar.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(1)
+            cb()
+          }
+        ], done)
+      }
+    })
+  })
+
+  it('nodeAll.hangUp nodeWStar using PeerInfo', (done) => {
+    nodeAll.hangUp(nodeWStar.peerInfo, (err) => {
+      expect(err).to.not.exist()
+      setTimeout(check, 500)
+
+      function check () {
+        parallel([
+          (cb) => {
+            const peers = nodeAll.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(nodeAll.swarm.muxedConns)).to.have.length(0)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeWStar.peerBook.getAll()
+            expect(err).to.not.exist()
+            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(nodeWStar.swarm.muxedConns)).to.have.length(0)
+            cb()
+          }
+        ], done)
+      }
+    })
+  })
 })
