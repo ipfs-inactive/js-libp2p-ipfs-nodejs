@@ -1,0 +1,86 @@
+/* eslint-env mocha */
+'use strict'
+
+const chai = require('chai')
+chai.use(require('dirty-chai'))
+const expect = chai.expect
+const parallel = require('async/parallel')
+// const series = require('async/series')
+// const multiaddr = require('multiaddr')
+// const pull = require('pull-stream')
+const signalling = require('libp2p-webrtc-star/src/sig-server')
+const utils = require('./utils')
+const createNode = utils.createNode
+const echo = utils.echo
+
+describe.skip('TCP + WebSockets + WebRTCStar', () => {
+  let nodeTCPnWSnWStar
+  let nodeTCP
+  let nodeWS
+  let nodeWStar
+
+  let ss
+
+  before((done) => {
+    parallel([
+      (cb) => {
+        signalling.start({ port: 24642 }, (err, server) => {
+          expect(err).to.not.exist()
+          ss = server
+          cb()
+        })
+      },
+      (cb) => createNode([
+        '/ip4/0.0.0.0/tcp/0',
+        '/ip4/127.0.0.1/tcp/25011/ws',
+        '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
+      ], (err, node) => {
+        expect(err).to.not.exist()
+        nodeTCPnWSnWStar = node
+        node.handle('/echo/1.0.0', echo)
+        node.start(cb)
+      }),
+      (cb) => createNode([
+        '/ip4/0.0.0.0/tcp/0'
+      ], (err, node) => {
+        expect(err).to.not.exist()
+        nodeTCP = node
+        node.handle('/echo/1.0.0', echo)
+        node.start(cb)
+      }),
+      (cb) => createNode([
+        '/ip4/127.0.0.1/tcp/25022/ws'
+      ], (err, node) => {
+        expect(err).to.not.exist()
+        nodeWS = node
+        node.handle('/echo/1.0.0', echo)
+        node.start(cb)
+      }),
+      (cb) => createNode([
+        '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
+      ], (err, node) => {
+        expect(err).to.not.exist()
+        nodeWStar = node
+        node.handle('/echo/1.0.0', echo)
+        node.start(cb)
+      })
+    ], done)
+  })
+
+  after((done) => {
+    parallel([
+      (cb) => nodeTCPnWSnWStar.stop(cb),
+      (cb) => nodeTCP.stop(cb),
+      (cb) => nodeWS.stop(cb),
+      (cb) => nodeWStar.stop(cb),
+      (cb) => ss.stop(done)
+    ], done)
+  })
+
+  it.skip('nodeAll.dial nodeTCP using PeerInfo', (done) => {})
+  it.skip('nodeAll.hangUp nodeTCP using PeerInfo', (done) => {})
+  it.skip('nodeAll.dial nodeWS using PeerInfo', (done) => {})
+  it.skip('nodeAll.hangUp nodeWS using PeerInfo', (done) => {})
+  it.skip('nodeAll.dial nodeWS using PeerInfo', (done) => {})
+  it.skip('nodeAll.hangUp nodeWebRTCStar using PeerInfo', (done) => {})
+})
