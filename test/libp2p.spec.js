@@ -158,7 +158,7 @@ describe('libp2p-ipfs-nodejs', () => {
   })
 
   it('mdns discovery', (done) => {
-    nodeA.once('peer', (peerInfo) => {
+    nodeA.once('peer:discovery', (peerInfo) => {
       expect(nodeB.peerInfo.id.toB58String())
         .to.eql(peerInfo.id.toB58String())
       done()
