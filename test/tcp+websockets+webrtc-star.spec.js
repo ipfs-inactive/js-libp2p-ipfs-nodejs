@@ -13,7 +13,7 @@ const utils = require('./utils')
 const createNode = utils.createNode
 const echo = utils.echo
 
-describe.skip('TCP + WebSockets + WebRTCStar', () => {
+describe('TCP + WebSockets + WebRTCStar', () => {
   let nodeTCPnWSnWStar
   let nodeTCP
   let nodeWS

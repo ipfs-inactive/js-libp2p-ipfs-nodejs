@@ -6,7 +6,6 @@ chai.use(require('dirty-chai'))
 const expect = chai.expect
 const parallel = require('async/parallel')
 const series = require('async/series')
-const multiaddr = require('multiaddr')
 const pull = require('pull-stream')
 const utils = require('./utils')
 const createNode = utils.createNode
@@ -110,12 +109,7 @@ describe('TCP only', () => {
   })
 
   it('nodeA.dial nodeB using multiaddr', (done) => {
-    const nodeBMultiaddr = multiaddr(
-      nodeB.peerInfo.multiaddrs[0].toString() +
-      '/ipfs/' + nodeB.peerInfo.id.toB58String()
-    )
-
-    nodeA.dial(nodeBMultiaddr, '/echo/1.0.0', (err, conn) => {
+    nodeA.dial(nodeB.peerInfo.multiaddrs[0], '/echo/1.0.0', (err, conn) => {
       // Some time for Identify to finish
       setTimeout(check, 500)
 
@@ -150,12 +144,7 @@ describe('TCP only', () => {
   })
 
   it('nodeA.hangUp nodeB using multiaddr (second)', (done) => {
-    const nodeBMultiaddr = multiaddr(
-      nodeB.peerInfo.multiaddrs[0].toString() +
-      '/ipfs/' + nodeB.peerInfo.id.toB58String()
-    )
-
-    nodeA.hangUp(nodeBMultiaddr, (err) => {
+    nodeA.hangUp(nodeB.peerInfo.multiaddrs[0], (err) => {
       expect(err).to.not.exist()
       setTimeout(check, 500)
 
