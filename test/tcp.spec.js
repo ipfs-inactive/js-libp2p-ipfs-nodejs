@@ -90,16 +90,14 @@ describe('TCP only', () => {
         parallel([
           (cb) => {
             const peers = nodeA.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(peers)).to.have.length(1)
             expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(0)
-
             cb()
           },
           (cb) => {
             const peers = nodeB.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(peers)).to.have.length(1)
+
             expect(Object.keys(nodeB.swarm.muxedConns)).to.have.length(0)
             cb()
           }
@@ -118,14 +116,16 @@ describe('TCP only', () => {
         series([
           (cb) => {
             const peers = nodeA.peerBook.getAll()
-            expect(err).to.not.exist()
             expect(Object.keys(peers)).to.have.length(1)
+
+            expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(1)
             cb()
           },
           (cb) => {
             const peers = nodeB.peerBook.getAll()
-            expect(err).to.not.exist()
             expect(Object.keys(peers)).to.have.length(1)
+
+            expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(1)
             cb()
           }
         ], () => {
@@ -152,16 +152,15 @@ describe('TCP only', () => {
         parallel([
           (cb) => {
             const peers = nodeA.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(0)
-            expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(0)
+            expect(Object.keys(peers)).to.have.length(1)
 
+            expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(0)
             cb()
           },
           (cb) => {
             const peers = nodeB.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(peers)).to.have.length(1)
+
             expect(Object.keys(nodeB.swarm.muxedConns)).to.have.length(0)
             cb()
           }
@@ -170,7 +169,66 @@ describe('TCP only', () => {
     })
   })
 
-  // TODO for when we preserve the contact in peerInfo
-  it.skip('nodeA.dial nodeB using PeerId', (done) => {})
-  it.skip('nodeA.hangUp nodeB using PeerId (third)', (done) => {})
+  it('nodeA.dial nodeB using PeerId', (done) => {
+    nodeA.dial(nodeB.peerInfo.id, '/echo/1.0.0', (err, conn) => {
+      // Some time for Identify to finish
+      setTimeout(check, 500)
+
+      function check () {
+        expect(err).to.not.exist()
+        series([
+          (cb) => {
+            const peers = nodeA.peerBook.getAll()
+            expect(Object.keys(peers)).to.have.length(1)
+
+            expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(1)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeB.peerBook.getAll()
+            expect(Object.keys(peers)).to.have.length(1)
+
+            expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(1)
+            cb()
+          }
+        ], () => {
+          pull(
+            pull.values([new Buffer('hey')]),
+            conn,
+            pull.collect((err, data) => {
+              expect(err).to.not.exist()
+              expect(data).to.be.eql([new Buffer('hey')])
+              done()
+            })
+          )
+        })
+      }
+    })
+  })
+
+  it('nodeA.hangUp nodeB using PeerId (third)', (done) => {
+    nodeA.hangUp(nodeB.peerInfo.multiaddrs[0], (err) => {
+      expect(err).to.not.exist()
+      setTimeout(check, 500)
+
+      function check () {
+        parallel([
+          (cb) => {
+            const peers = nodeA.peerBook.getAll()
+            expect(Object.keys(peers)).to.have.length(1)
+
+            expect(Object.keys(nodeA.swarm.muxedConns)).to.have.length(0)
+            cb()
+          },
+          (cb) => {
+            const peers = nodeB.peerBook.getAll()
+            expect(Object.keys(peers)).to.have.length(1)
+
+            expect(Object.keys(nodeB.swarm.muxedConns)).to.have.length(0)
+            cb()
+          }
+        ], done)
+      }
+    })
+  })
 })

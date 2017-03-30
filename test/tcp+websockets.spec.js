@@ -65,14 +65,14 @@ describe('TCP + WebSockets', () => {
         parallel([
           (cb) => {
             const peers = nodeTCP.peerBook.getAll()
-            expect(err).to.not.exist()
             expect(Object.keys(peers)).to.have.length(1)
+            expect(Object.keys(nodeTCP.swarm.muxedConns)).to.have.length(1)
             cb()
           },
           (cb) => {
             const peers = nodeTCPnWS.peerBook.getAll()
-            expect(err).to.not.exist()
             expect(Object.keys(peers)).to.have.length(1)
+            expect(Object.keys(nodeTCPnWS.swarm.muxedConns)).to.have.length(1)
             cb()
           }
         ], done)
@@ -89,16 +89,14 @@ describe('TCP + WebSockets', () => {
         parallel([
           (cb) => {
             const peers = nodeTCP.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(peers)).to.have.length(1)
             expect(Object.keys(nodeTCP.swarm.muxedConns)).to.have.length(0)
 
             cb()
           },
           (cb) => {
             const peers = nodeTCPnWS.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(peers)).to.have.length(1)
             expect(Object.keys(nodeTCPnWS.swarm.muxedConns)).to.have.length(0)
             cb()
           }
@@ -118,14 +116,14 @@ describe('TCP + WebSockets', () => {
         parallel([
           (cb) => {
             const peers = nodeTCPnWS.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(1)
+            expect(Object.keys(peers)).to.have.length(2)
+            expect(Object.keys(nodeTCPnWS.swarm.muxedConns)).to.have.length(1)
             cb()
           },
           (cb) => {
             const peers = nodeWS.peerBook.getAll()
-            expect(err).to.not.exist()
             expect(Object.keys(peers)).to.have.length(1)
+            expect(Object.keys(nodeWS.swarm.muxedConns)).to.have.length(1)
             cb()
           }
         ], done)
@@ -142,16 +140,14 @@ describe('TCP + WebSockets', () => {
         parallel([
           (cb) => {
             const peers = nodeTCPnWS.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(peers)).to.have.length(2)
             expect(Object.keys(nodeTCPnWS.swarm.muxedConns)).to.have.length(0)
 
             cb()
           },
           (cb) => {
             const peers = nodeWS.peerBook.getAll()
-            expect(err).to.not.exist()
-            expect(Object.keys(peers)).to.have.length(0)
+            expect(Object.keys(peers)).to.have.length(1)
             expect(Object.keys(nodeWS.swarm.muxedConns)).to.have.length(0)
             cb()
           }
