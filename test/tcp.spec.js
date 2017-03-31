@@ -107,7 +107,7 @@ describe('TCP only', () => {
   })
 
   it('nodeA.dial nodeB using multiaddr', (done) => {
-    nodeA.dial(nodeB.peerInfo.multiaddrs[0], '/echo/1.0.0', (err, conn) => {
+    nodeA.dial(nodeB.peerInfo.multiaddrs.toArray()[0], '/echo/1.0.0', (err, conn) => {
       // Some time for Identify to finish
       setTimeout(check, 500)
 
@@ -144,7 +144,7 @@ describe('TCP only', () => {
   })
 
   it('nodeA.hangUp nodeB using multiaddr (second)', (done) => {
-    nodeA.hangUp(nodeB.peerInfo.multiaddrs[0], (err) => {
+    nodeA.hangUp(nodeB.peerInfo.multiaddrs.toArray()[0], (err) => {
       expect(err).to.not.exist()
       setTimeout(check, 500)
 
@@ -207,7 +207,7 @@ describe('TCP only', () => {
   })
 
   it('nodeA.hangUp nodeB using PeerId (third)', (done) => {
-    nodeA.hangUp(nodeB.peerInfo.multiaddrs[0], (err) => {
+    nodeA.hangUp(nodeB.peerInfo.multiaddrs.toArray()[0], (err) => {
       expect(err).to.not.exist()
       setTimeout(check, 500)
 

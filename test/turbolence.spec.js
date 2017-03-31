@@ -47,10 +47,6 @@ describe('Turbolence tests', () => {
   })
 
   it('connect nodeA to that node', (done) => {
-    if (process.env.LIBP2P_MUXER === 'multiplex') {
-      return done() // TODO figure out why this fails in isolation
-    }
-
     const spawnedId = require('./test-data/test-id.json')
     const maddr = multiaddr('/ip4/127.0.0.1/tcp/12345/ipfs/' + spawnedId.id)
 

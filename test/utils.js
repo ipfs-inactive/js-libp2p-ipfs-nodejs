@@ -24,7 +24,7 @@ function createNode (multiaddrs, options, callback) {
     (cb) => PeerId.create({ bits: 1024 }, cb),
     (peerId, cb) => PeerInfo.create(peerId, cb),
     (peerInfo, cb) => {
-      multiaddrs.map((ma) => peerInfo.multiaddr.add(ma))
+      multiaddrs.map((ma) => peerInfo.multiaddrs.add(ma))
       cb(null, peerInfo)
     },
     (peerInfo, cb) => {

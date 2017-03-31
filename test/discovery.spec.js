@@ -10,8 +10,7 @@ const utils = require('./utils')
 const createNode = utils.createNode
 const echo = utils.echo
 
-// Take so much time (need to make the discovery thing configurable)
-describe.skip('discovery', () => {
+describe('discovery', () => {
   let nodeA
   let nodeB
   let ss
