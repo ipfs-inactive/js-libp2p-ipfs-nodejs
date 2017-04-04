@@ -7,6 +7,7 @@ const MulticastDNS = require('libp2p-mdns')
 const WS = require('libp2p-websockets')
 const Railing = require('libp2p-railing')
 const spdy = require('libp2p-spdy')
+const KadDHT = require('libp2p-kad-dht')
 const multiplex = require('libp2p-multiplex')
 const secio = require('libp2p-secio')
 const libp2p = require('libp2p')
@@ -49,11 +50,10 @@ class Node extends libp2p {
       ],
       connection: {
         muxer: getMuxers(options.muxer),
-        crypto: [
-          secio
-        ]
+        crypto: [ secio ]
       },
-      discovery: []
+      discovery: [],
+      DHT: KadDHT
     }
 
     if (options.webRTCStar) {
