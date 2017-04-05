@@ -9,7 +9,7 @@ const utils = require('./utils')
 const createNode = utils.createNode
 const _times = require('lodash.times')
 
-describe('.peerRouting', () => {
+describe('.contentRouting', () => {
   let nodeA
   let nodeB
   let nodeC
@@ -31,6 +31,14 @@ describe('.peerRouting', () => {
       nodeC = nodes[2]
       nodeD = nodes[3]
       nodeE = nodes[4]
+
+      parallel([
+        (cb) => nodeA.dial(nodeB.peerInfo, cb),
+        (cb) => nodeB.dial(nodeC.peerInfo, cb),
+        (cb) => nodeC.dial(nodeD.peerInfo, cb),
+        (cb) => nodeD.dial(nodeE.peerInfo, cb),
+        (cb) => nodeE.dial(nodeA.peerInfo, cb)
+      ], done)
     })
   })
 
@@ -42,5 +50,11 @@ describe('.peerRouting', () => {
       (cb) => nodeD.stop(cb),
       (cb) => nodeE.stop(cb)
     ], done)
+  })
+
+  describe('ring', () => {
+    it.skip('nodeA.contentRouting.provide', (done) => {})
+    it.skip('nodeE.contentRouting.findProviders for existing record', (done) => {})
+    it.skip('nodeC.contentRouting.findProviders for non existing record (timeout)', (done) => {})
   })
 })
