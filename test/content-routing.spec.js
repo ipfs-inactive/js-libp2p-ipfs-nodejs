@@ -10,7 +10,7 @@ const createNode = utils.createNode
 const _times = require('lodash.times')
 const CID = require('cids')
 
-describe('.contentRouting', () => {
+describe.only('.contentRouting', () => {
   let nodeA
   let nodeB
   let nodeC
@@ -56,6 +56,8 @@ describe('.contentRouting', () => {
   describe('le ring', () => {
     const cid = new CID('QmTp9VkYvnHyrqKQuFPiuZkiX9gPcqj6x5LJ1rmWuSySnL')
 
+    // it('timeout', (done) => setTimeout(done, 5000))
+
     it('nodeA.contentRouting.provide', (done) => {
       nodeA.contentRouting.provide(cid, done)
     })
@@ -63,7 +65,8 @@ describe('.contentRouting', () => {
     it('nodeE.contentRouting.findProviders for existing record', (done) => {
       nodeE.contentRouting.findProviders(cid, 5000, (err, providers) => {
         expect(err).to.not.exist()
-        expect(providers).length.to.be.above(0)
+        expect(providers).to.have.length.above(0)
+        console.log(providers)
         done()
       })
     })
@@ -72,7 +75,8 @@ describe('.contentRouting', () => {
       const cid = new CID('QmTp9VkYvnHyrqKQuFPiuZkiX9gPcqj6x5LJ1rmWuSnnnn')
 
       nodeE.contentRouting.findProviders(cid, 5000, (err, providers) => {
-        expect(err).to.exist()
+        expect(err).to.not.exist()
+        expect(providers).to.have.length(0)
         done()
       })
     })

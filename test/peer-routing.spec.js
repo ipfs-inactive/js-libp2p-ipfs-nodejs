@@ -53,7 +53,7 @@ describe.only('.peerRouting', () => {
   })
 
   describe('el ring', () => {
-    it('time', (done) => setTimeout(done, 5000))
+    // it('time', (done) => setTimeout(done, 5000))
 
     it('nodeA.dial by Id to node C', (done) => {
       nodeA.dial(nodeC.peerInfo.id, done)
