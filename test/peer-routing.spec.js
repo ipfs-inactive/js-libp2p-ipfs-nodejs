@@ -53,12 +53,14 @@ describe.only('.peerRouting', () => {
   })
 
   describe('el ring', () => {
+    it('time', (done) => setTimeout(done, 5000))
+
     it('nodeA.dial by Id to node C', (done) => {
       nodeA.dial(nodeC.peerInfo.id, done)
     })
 
     it.skip('nodeB.dial by Id to node D', (done) => {})
     it.skip('nodeC.dial by Id to node E', (done) => {})
-    it.skip('nodeB.peerRouting.findPeers(nodeE.peerInfo.id)', (done) => {})
+    it.skip('nodeB.peerRouting.findPeer(nodeE.peerInfo.id)', (done) => {})
   })
 })

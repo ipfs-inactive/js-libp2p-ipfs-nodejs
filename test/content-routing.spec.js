@@ -10,7 +10,7 @@ const createNode = utils.createNode
 const _times = require('lodash.times')
 const CID = require('cids')
 
-describe.only('.contentRouting', () => {
+describe('.contentRouting', () => {
   let nodeA
   let nodeB
   let nodeC
