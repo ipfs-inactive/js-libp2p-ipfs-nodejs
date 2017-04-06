@@ -8,8 +8,9 @@ const parallel = require('async/parallel')
 const utils = require('./utils')
 const createNode = utils.createNode
 const _times = require('lodash.times')
+const CID = require('cids')
 
-describe('.contentRouting', () => {
+describe.only('.contentRouting', () => {
   let nodeA
   let nodeB
   let nodeC
@@ -52,9 +53,21 @@ describe('.contentRouting', () => {
     ], done)
   })
 
-  describe('ring', () => {
-    it.skip('nodeA.contentRouting.provide', (done) => {})
-    it.skip('nodeE.contentRouting.findProviders for existing record', (done) => {})
+  describe('le ring', () => {
+    const cid = new CID('QmTp9VkYvnHyrqKQuFPiuZkiX9gPcqj6x5LJ1rmWuSySnL')
+
+    it('nodeA.contentRouting.provide', (done) => {
+      nodeA.contentRouting.provide(cid, done)
+    })
+
+    it('nodeE.contentRouting.findProviders for existing record', (done) => {
+      nodeE.contentRouting.findProviders(cid, 5000, (err, providers) => {
+        expect(err).to.not.exist()
+        expect(providers).length.to.be.above(0)
+        done()
+      })
+    })
+
     it.skip('nodeC.contentRouting.findProviders for non existing record (timeout)', (done) => {})
   })
 })

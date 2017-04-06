@@ -40,6 +40,7 @@
     "aegir": "^11.0.1",
     "async": "^2.2.0",
     "chai": "^3.5.0",
+    "cids": "^0.5.0",
     "dirty-chai": "^1.2.2",
     "lodash.times": "^4.3.2",
     "pre-commit": "^1.2.2",
