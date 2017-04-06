@@ -4,10 +4,10 @@
   "description": "The libp2p build (module) used by js-ipfs on Node.js",
   "main": "src/index.js",
   "scripts": {
-    "test": "npm run test:muxer:spdy && npm run test:muxer:multiplex",
+    "test": "npm run test:muxer:both",
     "test:muxer:spdy": "LIBP2P_MUXER=spdy aegir-test node",
     "test:muxer:multiplex": "LIBP2P_MUXER=multiplex aegir-test node",
-    "test:muxer:both": "LIBP2P_MUXER=spdy, multiplex aegir-test node",
+    "test:muxer:both": "LIBP2P_MUXER=\"spdy, multiplex\" aegir-test node",
     "lint": "aegir-lint",
     "release": "aegir-release node",
     "release-minor": "aegir-release node --type minor",

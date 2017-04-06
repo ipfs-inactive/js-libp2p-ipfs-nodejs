@@ -18,7 +18,7 @@ describe.only('.peerRouting', () => {
 
   before((done) => {
     const tasks = _times(5, () => (cb) => {
-      createNode('/ip4/0.0.0.0/tcp/0', (err, node) => {
+      createNode('/ip4/0.0.0.0/tcp/0', { mdns: false }, (err, node) => {
         expect(err).to.not.exist()
         node.start((err) => cb(err, node))
       })
