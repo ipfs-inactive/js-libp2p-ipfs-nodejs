@@ -68,6 +68,13 @@ describe.only('.contentRouting', () => {
       })
     })
 
-    it.skip('nodeC.contentRouting.findProviders for non existing record (timeout)', (done) => {})
+    it('nodeC.contentRouting.findProviders for non existing record (timeout)', (done) => {
+      const cid = new CID('QmTp9VkYvnHyrqKQuFPiuZkiX9gPcqj6x5LJ1rmWuSnnnn')
+
+      nodeE.contentRouting.findProviders(cid, 5000, (err, providers) => {
+        expect(err).to.exist()
+        done()
+      })
+    })
   })
 })
