@@ -10,7 +10,7 @@ const createNode = utils.createNode
 const _times = require('lodash.times')
 const CID = require('cids')
 
-describe.only('.contentRouting', () => {
+describe('.contentRouting', () => {
   let nodeA
   let nodeB
   let nodeC
@@ -56,7 +56,9 @@ describe.only('.contentRouting', () => {
   describe('le ring', () => {
     const cid = new CID('QmTp9VkYvnHyrqKQuFPiuZkiX9gPcqj6x5LJ1rmWuSySnL')
 
-    // it('timeout', (done) => setTimeout(done, 5000))
+    it('let kbucket get filled', (done) => {
+      setTimeout(() => done(), 50)
+    })
 
     it('nodeA.contentRouting.provide', (done) => {
       nodeA.contentRouting.provide(cid, done)

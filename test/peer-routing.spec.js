@@ -9,7 +9,7 @@ const utils = require('./utils')
 const createNode = utils.createNode
 const _times = require('lodash.times')
 
-describe.only('.peerRouting', () => {
+describe('.peerRouting', () => {
   let nodeA
   let nodeB
   let nodeC
@@ -53,14 +53,37 @@ describe.only('.peerRouting', () => {
   })
 
   describe('el ring', () => {
-    // it('time', (done) => setTimeout(done, 5000))
-
-    it('nodeA.dial by Id to node C', (done) => {
-      nodeA.dial(nodeC.peerInfo.id, done)
+    it('let kbucket get filled', (done) => {
+      setTimeout(() => done(), 50)
     })
 
-    it.skip('nodeB.dial by Id to node D', (done) => {})
-    it.skip('nodeC.dial by Id to node E', (done) => {})
-    it.skip('nodeB.peerRouting.findPeer(nodeE.peerInfo.id)', (done) => {})
+    it('nodeA.dial by Id to node C', (done) => {
+      nodeA.dial(nodeC.peerInfo.id, (err) => {
+        expect(err).to.not.exist()
+        done()
+      })
+    })
+
+    it('nodeB.dial by Id to node D', (done) => {
+      nodeB.dial(nodeD.peerInfo.id, (err) => {
+        expect(err).to.not.exist()
+        done()
+      })
+    })
+
+    it('nodeC.dial by Id to node E', (done) => {
+      nodeC.dial(nodeE.peerInfo.id, (err) => {
+        expect(err).to.not.exist()
+        done()
+      })
+    })
+
+    it('nodeB.peerRouting.findPeer(nodeE.peerInfo.id)', (done) => {
+      nodeB.peerRouting.findPeer(nodeE.peerInfo.id, (err, peerInfo) => {
+        expect(err).to.not.exist()
+        expect(nodeE.peerInfo.id.toB58String()).to.equal(peerInfo.id.toB58String())
+        done()
+      })
+    })
   })
 })

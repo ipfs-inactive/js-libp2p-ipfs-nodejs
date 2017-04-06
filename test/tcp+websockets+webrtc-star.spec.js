@@ -5,9 +5,6 @@ const chai = require('chai')
 chai.use(require('dirty-chai'))
 const expect = chai.expect
 const parallel = require('async/parallel')
-// const series = require('async/series')
-// const multiaddr = require('multiaddr')
-// const pull = require('pull-stream')
 const signalling = require('libp2p-webrtc-star/src/sig-server')
 const utils = require('./utils')
 const createNode = utils.createNode
