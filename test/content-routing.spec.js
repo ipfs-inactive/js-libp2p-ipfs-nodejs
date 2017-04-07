@@ -68,7 +68,6 @@ describe('.contentRouting', () => {
       nodeE.contentRouting.findProviders(cid, 5000, (err, providers) => {
         expect(err).to.not.exist()
         expect(providers).to.have.length.above(0)
-        console.log(providers)
         done()
       })
     })
