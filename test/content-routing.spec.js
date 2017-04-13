@@ -59,7 +59,7 @@ describe('.contentRouting', () => {
     const cid = new CID('QmTp9VkYvnHyrqKQuFPiuZkiX9gPcqj6x5LJ1rmWuSySnL')
 
     it('let kbucket get filled', (done) => {
-      setTimeout(() => done(), 50)
+      setTimeout(() => done(), 250)
     })
 
     it('nodeA.contentRouting.provide', (done) => {

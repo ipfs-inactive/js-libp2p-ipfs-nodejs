@@ -56,7 +56,7 @@ describe('.peerRouting', () => {
 
   describe('el ring', () => {
     it('let kbucket get filled', (done) => {
-      setTimeout(() => done(), 50)
+      setTimeout(() => done(), 250)
     })
 
     it('nodeA.dial by Id to node C', (done) => {
