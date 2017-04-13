@@ -69,7 +69,8 @@ describe('Turbolence tests', () => {
   })
 
   it('crash that node, ensure nodeA continues going steady', (done) => {
-    setTimeout(() => nodeSpawn.kill('SIGKILL'), 1000)
+    // setTimeout(() => nodeSpawn.kill('SIGKILL'), 1000)
+    nodeSpawn.kill('SIGKILL')
     setTimeout(check, 5000)
 
     function check () {
