@@ -44,7 +44,8 @@
     "dirty-chai": "^1.2.2",
     "lodash.times": "^4.3.2",
     "pre-commit": "^1.2.2",
-    "pull-stream": "^3.5.0"
+    "pull-stream": "^3.5.0",
+    "sinon": "^2.1.0"
   },
   "dependencies": {
     "libp2p": "~0.9.0",
