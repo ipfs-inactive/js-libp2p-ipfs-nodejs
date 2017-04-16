@@ -77,11 +77,6 @@ describe('test relay', function () {
         let nodeB = testNodes['nodeB']
         let relayNode = testNodes['relayNode']
 
-        // for now, explicitly add the relay nodes,
-        // because its really hard to time when they
-        // are added in the circuit. We have a test
-        // to verify that that functionality works on
-        // its own
         waterfall([
           (cb) => nodeA.dial(relayNode.peerInfo, cb),
           (conn, cb) => nodeB.dial(relayNode.peerInfo, cb)
@@ -169,7 +164,9 @@ describe('test relay', function () {
               muxer: muxer,
               addrs: [
                 `/ip4/0.0.0.0/tcp/${portBase++}`,
-                `/ip4/0.0.0.0/tcp/9022/ipfs/${nodeKeys.node2.id}/p2p-circuit`
+                `/ip4/0.0.0.0/tcp/9022/ipfs/${nodeKeys.node2.id}/p2p-circuit`,
+                `/ip4/0.0.0.0/tcp/9023/ws/ipfs/${nodeKeys.node2.id}/p2p-circuit`,
+                `/ipfs/${nodeKeys.node2.id}/p2p-circuit`
               ]
             },
             nodeB: {
@@ -179,7 +176,9 @@ describe('test relay', function () {
               muxer: muxer,
               addrs: [
                 `/ip4/0.0.0.0/tcp/${portBase++}/ws`,
-                `/ip4/0.0.0.0/tcp/9021/ws/ipfs/${nodeKeys.node1.id}/p2p-circuit`
+                `/ip4/0.0.0.0/tcp/9020/ipfs/${nodeKeys.node1.id}/p2p-circuit`,
+                `/ip4/0.0.0.0/tcp/9021/ws/ipfs/${nodeKeys.node1.id}/p2p-circuit`,
+                `/ipfs/${nodeKeys.node1.id}/p2p-circuit`
               ]
             }
           },
@@ -196,6 +195,7 @@ describe('test relay', function () {
           })
       }
 
+      // no way to tell which relay is going to be used with multidialing
       describe(`passive`, function () {
         beforeEach(function (done) {
           waterfall([
@@ -253,16 +253,17 @@ describe('test relay', function () {
         })
       })
 
-      // TODO: active dialing needs more work
       describe.skip(`active`, function () {
         beforeEach(function (done) {
           active = true
           setUpNodes(multiplex, () => {
-            setTimeout(done, 5000) // give the nodes time to startup
+            setTimeout(done, 1000) // give the nodes time to startup
           })
         })
 
         afterEach(function circuitTests (done) {
+          relaySpy1.reset()
+          relaySpy2.reset()
           utils.stopNodes(testNodes, done)
         })
 
@@ -322,7 +323,8 @@ describe('test relay', function () {
               config: {
                 relay: {
                   Circuit: {
-                    Enabled: true
+                    Enabled: true,
+                    Active: true
                   }
                 }
               }
@@ -339,7 +341,8 @@ describe('test relay', function () {
               config: {
                 relay: {
                   Circuit: {
-                    Enabled: true
+                    Enabled: true,
+                    Active: true
                   }
                 }
               }
@@ -351,8 +354,8 @@ describe('test relay', function () {
               muxer: muxer,
               addrs: [
                 `/ip4/0.0.0.0/tcp/${portBase++}`,
-                `/ip4/0.0.0.0/tcp/9033/ws/ipfs/${nodeKeys.node2.id}/p2p-circuit/` +
-                `ip4/0.0.0.0/tcp/9031/ipfs/${nodeKeys.node1.id}/p2p-circuit`
+                `/ip4/0.0.0.0/tcp/9033/ws/ipfs/${nodeKeys.node2.id}/p2p-circuit` +
+                `/ip4/0.0.0.0/tcp/9031/ipfs/${nodeKeys.node1.id}/p2p-circuit`
               ]
             },
             nodeB: {
@@ -398,6 +401,8 @@ describe('test relay', function () {
       })
 
       afterEach(function circuitTests (done) {
+        relaySpy1.reset()
+        relaySpy2.reset()
         utils.stopNodes(testNodes, done)
       })
 
