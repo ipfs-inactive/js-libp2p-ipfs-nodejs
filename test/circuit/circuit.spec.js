@@ -10,7 +10,6 @@ const waterfall = require('async/waterfall')
 const utils = require('./helpers/utils')
 
 const sinon = require('sinon')
-
 const chai = require('chai')
 chai.use(require('dirty-chai'))
 
@@ -38,8 +37,8 @@ describe('test relay', function () {
             isCrypto: true,
             config: {
               relay: {
-                Circuit: {
-                  Enabled: true
+                circuit: {
+                  enabled: true
                 }
               }
             }
@@ -85,9 +84,6 @@ describe('test relay', function () {
     })
 
     afterEach(function circuitTests (done) {
-      // spdy throws a socket hangup...
-      // need to investigate how to properly shutdown,
-      // for now we'll ignore the error
       utils.stopNodes(testNodes, () => done())
     })
 
@@ -132,9 +128,9 @@ describe('test relay', function () {
               isCrypto: true,
               config: {
                 relay: {
-                  Circuit: {
-                    Enabled: true,
-                    Active: active
+                  circuit: {
+                    enabled: true,
+                    active: active
                   }
                 }
               }
@@ -150,9 +146,9 @@ describe('test relay', function () {
               isCrypto: true,
               config: {
                 relay: {
-                  Circuit: {
-                    Enabled: true,
-                    Active: active
+                  circuit: {
+                    enabled: true,
+                    active: active
                   }
                 }
               }
@@ -188,8 +184,8 @@ describe('test relay', function () {
             }
 
             testNodes = nodes
-            relaySpy1 = sinon.spy(testNodes['relayNode1'].relayCircuit, 'circuit')
-            relaySpy2 = sinon.spy(testNodes['relayNode2'].relayCircuit, 'circuit')
+            relaySpy1 = sinon.spy(testNodes['relayNode1'].relayCircuit, '_circuit')
+            relaySpy2 = sinon.spy(testNodes['relayNode2'].relayCircuit, '_circuit')
 
             done()
           })
@@ -322,9 +318,9 @@ describe('test relay', function () {
               isCrypto: true,
               config: {
                 relay: {
-                  Circuit: {
-                    Enabled: true,
-                    Active: true
+                  circuit: {
+                    enabled: true,
+                    active: true
                   }
                 }
               }
@@ -340,9 +336,9 @@ describe('test relay', function () {
               isCrypto: true,
               config: {
                 relay: {
-                  Circuit: {
-                    Enabled: true,
-                    Active: true
+                  circuit: {
+                    enabled: true,
+                    active: true
                   }
                 }
               }
@@ -375,8 +371,8 @@ describe('test relay', function () {
             }
 
             testNodes = nodes
-            relaySpy1 = sinon.spy(testNodes['relayNode1'].relayCircuit, 'circuit')
-            relaySpy2 = sinon.spy(testNodes['relayNode2'].relayCircuit, 'circuit')
+            relaySpy1 = sinon.spy(testNodes['relayNode1'].relayCircuit, '_circuit')
+            relaySpy2 = sinon.spy(testNodes['relayNode2'].relayCircuit, '_circuit')
 
             done()
           })
