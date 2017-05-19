@@ -52,12 +52,15 @@ class Node extends libp2p {
         muxer: getMuxers(options.muxer),
         crypto: [ secio ]
       },
-      discovery: [],
-      DHT: KadDHT
+      discovery: []
     }
 
     if (options.webRTCStar) {
       modules.discovery.push(webRTCStar.discovery)
+    }
+
+    if (options.DHT) {
+      modules.DHT = KadDHT
     }
 
     if (options.mdns) {

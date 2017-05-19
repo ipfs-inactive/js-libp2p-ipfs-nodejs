@@ -13,13 +13,15 @@ const echo = utils.echo
 describe('discovery', () => {
   let nodeA
   let nodeB
+  let port = 24642
   let ss
 
   function setup (options) {
     before((done) => {
+      port++
       parallel([
         (cb) => {
-          signalling.start({ port: 24642 }, (err, server) => {
+          signalling.start({ port: port }, (err, server) => {
             expect(err).to.not.exist()
             ss = server
             cb()
@@ -27,7 +29,7 @@ describe('discovery', () => {
         },
         (cb) => createNode([
           '/ip4/0.0.0.0/tcp/0',
-          '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
+          `/libp2p-webrtc-star/ip4/127.0.0.1/tcp/${port}/ws`
         ], options, (err, node) => {
           expect(err).to.not.exist()
           nodeA = node
@@ -36,7 +38,7 @@ describe('discovery', () => {
         }),
         (cb) => createNode([
           '/ip4/0.0.0.0/tcp/0',
-          '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
+          `/libp2p-webrtc-star/ip4/127.0.0.1/tcp/${port}/ws`
         ], options, (err, node) => {
           expect(err).to.not.exist()
           nodeB = node
