@@ -59,7 +59,7 @@ class Node extends libp2p {
       modules.discovery.push(webRTCStar.discovery)
     }
 
-    if (options.DHT) {
+    if (options.dht) {
       modules.DHT = KadDHT
     }
 
