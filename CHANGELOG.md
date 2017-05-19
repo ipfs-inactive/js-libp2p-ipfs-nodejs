@@ -1,3 +1,13 @@
+<a name="0.25.2"></a>
+## [0.25.2](https://github.com/ipfs/js-libp2p-ipfs-nodejs/compare/v0.25.1...v0.25.2) (2017-05-19)
+
+
+### Bug Fixes
+
+* use lowercase dht for options ([462707f](https://github.com/ipfs/js-libp2p-ipfs-nodejs/commit/462707f))
+
+
+
 <a name="0.25.1"></a>
 ## [0.25.1](https://github.com/ipfs/js-libp2p-ipfs-nodejs/compare/v0.25.0...v0.25.1) (2017-05-19)
 
