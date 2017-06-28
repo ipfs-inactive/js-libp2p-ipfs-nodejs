@@ -1,8 +1,6 @@
 'use strict'
 
 const TCP = require('libp2p-tcp')
-// const UTP = require('libp2p-utp')
-const WebRTCStar = require('libp2p-webrtc-star')
 const MulticastDNS = require('libp2p-mdns')
 const WS = require('libp2p-websockets')
 const Railing = require('libp2p-railing')
@@ -40,23 +38,17 @@ function getMuxers (muxers) {
 class Node extends libp2p {
   constructor (peerInfo, peerBook, options) {
     options = options || {}
-    const webRTCStar = new WebRTCStar()
 
     const modules = {
       transport: [
         new TCP(),
-        new WS(),
-        webRTCStar
+        new WS()
       ],
       connection: {
         muxer: getMuxers(options.muxer),
         crypto: [ secio ]
       },
       discovery: []
-    }
-
-    if (options.webRTCStar) {
-      modules.discovery.push(webRTCStar.discovery)
     }
 
     if (options.dht) {
@@ -71,6 +63,14 @@ class Node extends libp2p {
     if (options.bootstrap) {
       const r = new Railing(options.bootstrap)
       modules.discovery.push(r)
+    }
+
+    if (options.modules && options.modules.transport) {
+      options.modules.transport.forEach((t) => modules.transport.push(t))
+    }
+
+    if (options.modules && options.modules.discovery) {
+      options.modules.discovery.forEach((d) => modules.discovery.push(d))
     }
 
     super(modules, peerInfo, peerBook, options)
