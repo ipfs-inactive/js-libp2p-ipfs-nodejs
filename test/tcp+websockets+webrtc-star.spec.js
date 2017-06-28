@@ -7,7 +7,7 @@ const expect = chai.expect
 const parallel = require('async/parallel')
 const signalling = require('libp2p-webrtc-star/src/sig-server')
 const WStar = require('libp2p-webrtc-star')
-const electronWebRTC = require('electron-webrtc')
+const wrtc = require('wrtc')
 const utils = require('./utils')
 const createNode = utils.createNode
 const echo = utils.echo
@@ -30,7 +30,7 @@ describe('TCP + WebSockets + WebRTCStar', () => {
         })
       },
       (cb) => {
-        const wstar = new WStar({wrtc: electronWebRTC()})
+        const wstar = new WStar({wrtc: wrtc})
 
         createNode([
           '/ip4/0.0.0.0/tcp/0',
@@ -66,7 +66,7 @@ describe('TCP + WebSockets + WebRTCStar', () => {
       }),
 
       (cb) => {
-        const wstar = new WStar({wrtc: electronWebRTC()})
+        const wstar = new WStar({wrtc: wrtc})
 
         createNode([
           '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
