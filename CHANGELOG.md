@@ -1,3 +1,18 @@
+<a name="0.26.0"></a>
+# [0.26.0](https://github.com/ipfs/js-libp2p-ipfs-nodejs/compare/v0.25.2...v0.26.0) (2017-06-29)
+
+
+### Bug Fixes
+
+* use wrtc instead ([5253d23](https://github.com/ipfs/js-libp2p-ipfs-nodejs/commit/5253d23))
+
+
+### Features
+
+* use new webrtc-star, remove support it by default, support it to be pluggable ([05dde5b](https://github.com/ipfs/js-libp2p-ipfs-nodejs/commit/05dde5b))
+
+
+
 <a name="0.25.2"></a>
 ## [0.25.2](https://github.com/ipfs/js-libp2p-ipfs-nodejs/compare/v0.25.1...v0.25.2) (2017-05-19)
 
