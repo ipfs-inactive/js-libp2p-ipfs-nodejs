@@ -6,6 +6,8 @@ chai.use(require('dirty-chai'))
 const expect = chai.expect
 const parallel = require('async/parallel')
 const signalling = require('libp2p-webrtc-star/src/sig-server')
+const WStar = require('libp2p-webrtc-star')
+const wrtc = require('wrtc')
 const utils = require('./utils')
 const createNode = utils.createNode
 const echo = utils.echo
@@ -27,16 +29,25 @@ describe('TCP + WebSockets + WebRTCStar', () => {
           cb()
         })
       },
-      (cb) => createNode([
-        '/ip4/0.0.0.0/tcp/0',
-        '/ip4/127.0.0.1/tcp/25011/ws',
-        '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
-      ], (err, node) => {
-        expect(err).to.not.exist()
-        nodeAll = node
-        node.handle('/echo/1.0.0', echo)
-        node.start(cb)
-      }),
+      (cb) => {
+        const wstar = new WStar({wrtc: wrtc})
+
+        createNode([
+          '/ip4/0.0.0.0/tcp/0',
+          '/ip4/127.0.0.1/tcp/25011/ws',
+          '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
+        ], {
+          modules: {
+            transport: [wstar],
+            discovery: [wstar.discovery]
+          }
+        }, (err, node) => {
+          expect(err).to.not.exist()
+          nodeAll = node
+          node.handle('/echo/1.0.0', echo)
+          node.start(cb)
+        })
+      },
       (cb) => createNode([
         '/ip4/0.0.0.0/tcp/0'
       ], (err, node) => {
@@ -53,14 +64,24 @@ describe('TCP + WebSockets + WebRTCStar', () => {
         node.handle('/echo/1.0.0', echo)
         node.start(cb)
       }),
-      (cb) => createNode([
-        '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
-      ], (err, node) => {
-        expect(err).to.not.exist()
-        nodeWStar = node
-        node.handle('/echo/1.0.0', echo)
-        node.start(cb)
-      })
+
+      (cb) => {
+        const wstar = new WStar({wrtc: wrtc})
+
+        createNode([
+          '/libp2p-webrtc-star/ip4/127.0.0.1/tcp/24642/ws'
+        ], {
+          modules: {
+            transport: [wstar],
+            discovery: [wstar.discovery]
+          }
+        }, (err, node) => {
+          expect(err).to.not.exist()
+          nodeWStar = node
+          node.handle('/echo/1.0.0', echo)
+          node.start(cb)
+        })
+      }
     ], done)
   })
 
