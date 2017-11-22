@@ -46,7 +46,7 @@
     "lodash.times": "^4.3.2",
     "pre-commit": "^1.2.2",
     "pull-stream": "^3.6.0",
-    "wrtc": "0.0.62"
+    "wrtc": "0.0.63"
   },
   "dependencies": {
     "libp2p": "~0.9.1",
